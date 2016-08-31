@@ -91,6 +91,7 @@ scr_draw_border_text(display_get_gui_width()-10, 30, "M: Mute BGM", c_white, c_b
 scr_draw_border_text(display_get_gui_width()-10, 50, "WASD: Move", c_white, c_black, 2, 1.0)
 scr_draw_border_text(display_get_gui_width()-10, 50, "WASD: Move", c_white, c_black, 2, 1.0)
 
+
 switch(room_get_name(room)){
     
     case "rm_login":
@@ -118,6 +119,7 @@ switch(room_get_name(room)){
 
 // reset text
 draw_set_halign(fa_left)
+scr_draw_border_text(10, 30, "Ping: "+string(Network.ping), c_white, c_black, 2, 1.0)
 
 // pussycounter
 if(instance_exists(obj_Player)){

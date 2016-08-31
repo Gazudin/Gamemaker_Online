@@ -5,9 +5,29 @@ show_debug_message("Networking Event: " + string(command))
 switch(command){
 
     case "HELLO":
+        Network.server_status = "online"
+        Network.timer_start = get_timer()/1000 // got response, reset timeout timer
+        // immediately start the ping cycle
+        Network.ping_start = Network.timer_start
+        var packet = buffer_create(1, buffer_grow, 1);
+        buffer_write(packet, buffer_string, "ping");
+        scr_network_write(Network.TCP_socket, packet, "tcp");
+        
         server_time = buffer_read(argument0, buffer_string)
         show_debug_message("Server welcomes you @ " + server_time)
         break
+    
+    case "PING":
+        // update ping
+        _timer = get_timer()/1000 // get timer once
+        Network.ping = _timer - Network.ping_start
+        Network.ping_start = _timer
+        Network.timer_start = _timer
+        // send new ping
+        var packet = buffer_create(1, buffer_grow, 1);
+        buffer_write(packet, buffer_string, "ping");
+        scr_network_write(Network.TCP_socket, packet, "tcp");
+        break;
       
     case "LOGIN":
         status = buffer_read(argument0, buffer_string)

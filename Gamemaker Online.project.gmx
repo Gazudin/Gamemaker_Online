@@ -52,7 +52,6 @@
         <object>objects\obj_txt_Username</object>
         <object>objects\obj_txt_Password</object>
         <object>objects\obj_btn_Login</object>
-        <object>objects\obj_btn_Connect</object>
         <object>objects\obj_btn_Register</object>
       </objects>
     </objects>

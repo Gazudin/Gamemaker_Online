@@ -36,8 +36,9 @@ timer_start = get_timer()/1000 // milliseconds
 timer = timer_start
 ping_start = 0
 ping = 0
-frequency = 2000 // milliseconds till new connection
-timeout = 2500 // milliseconds before connection timeout
+ping_frequency = 1500// milliseconds between 2 pings
+ping_sent = false
+timeout = 3500 // milliseconds before connection timeout
 ip = "95.143.172.196"
 port = 61027
 
@@ -73,7 +74,16 @@ room_goto_next()
 
 timer = get_timer()/1000 - timer_start
 
-if(timer &gt;= timeout){
+if(timer &gt;= ping_frequency &amp;&amp; server_status == "online" &amp;&amp; ping_sent == false){
+
+    ping_start = get_timer()/1000
+    // send new ping
+    var packet = buffer_create(1, buffer_grow, 1);
+    buffer_write(packet, buffer_string, "ping");
+    ping_sent = true
+    scr_network_write(Network.TCP_socket, packet, "tcp");
+    
+} else if(timer &gt;= timeout){
     switch(Network.server_status){
         
         case "online":
@@ -93,9 +103,8 @@ if(timer &gt;= timeout){
         case "offline":
             event_user(0)
             break 
-        
     }
-}
+} 
 </string>
           </argument>
         </arguments>

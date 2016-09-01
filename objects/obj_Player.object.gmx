@@ -97,7 +97,10 @@ if(target_x != x || target_y != y){
     buffer_write(packet, buffer_u32, x);
     buffer_write(packet, buffer_u32, y);
    
+    //this is working --&gt; 
     scr_network_write(Network.TCP_socket, packet, "tcp");
+    // but this doesn't seem to reach server 
+    //scr_network_write(Network.UDP_socket, packet, "udp");
 }
 
 </string>

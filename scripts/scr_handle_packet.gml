@@ -34,9 +34,9 @@ switch(command){
         switch(status){
             // log in user
             case "TRUE":
-                target_room =  buffer_read(argument0, buffer_string)
-                target_x =  buffer_read(argument0, buffer_u16)
-                target_y =  buffer_read(argument0, buffer_u16)
+                target_room = buffer_read(argument0, buffer_string)
+                target_x = buffer_read(argument0, buffer_u16)
+                target_y = buffer_read(argument0, buffer_u16)
                 username = buffer_read(argument0, buffer_string)
                 game_role = buffer_read(argument0, buffer_string)
                  
@@ -44,6 +44,7 @@ switch(command){
                 room_goto(goto_room);
                 // Initiate a player object on this room
                 with(instance_create(target_x, target_y, obj_Player)){
+                    visible = false
                     username = other.username
                     game_role = other.game_role
                 }

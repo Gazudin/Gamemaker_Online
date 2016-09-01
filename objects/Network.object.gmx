@@ -79,6 +79,15 @@ if(timer &gt;= timeout){
         case "online":
             server_status = "offline"
             ping = 0
+            show_message("Connection timeout!")
+            // send logout event
+            var packet = buffer_create(1, buffer_grow, 1)
+            buffer_write(packet, buffer_string, "logout")
+            scr_network_write(Network.TCP_socket, packet, "tcp")
+            with(obj_Player){
+                instance_destroy()
+                room_goto(rm_login)
+            }
             break
         
         case "offline":

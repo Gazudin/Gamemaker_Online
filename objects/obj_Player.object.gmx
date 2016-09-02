@@ -2,7 +2,7 @@
 <object>
   <spriteName>spr_player</spriteName>
   <solid>0</solid>
-  <visible>-1</visible>
+  <visible>0</visible>
   <depth>0</depth>
   <persistent>-1</persistent>
   <parentName>&lt;undefined&gt;</parentName>
@@ -65,15 +65,12 @@ right = keyboard_check(ord('D'))
 if(up){
     target_y -= spd
 }
-
 if(down){
     target_y += spd
 }
-
 if(left){
     target_x -= spd;
 }
-
 if(right){
     target_x += spd
 }
@@ -100,10 +97,40 @@ if(target_x != x || target_y != y){
     buffer_write(packet, buffer_u32, x);
     buffer_write(packet, buffer_u32, y);
    
-    //scr_network_write(Network.TCP_socket, packet, "tcp");
+    //this is working --&gt; 
     scr_network_write(Network.TCP_socket, packet, "tcp");
+    // but this doesn't seem to reach server 
+    //scr_network_write(Network.UDP_socket, packet, "udp");
 }
 
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="7" enumb="4">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// make visible
+if(room_get_name(room) != "rm_login"){
+    visible = true
+} else {
+    visible = false
+}
 </string>
           </argument>
         </arguments>

@@ -5,18 +5,29 @@ show_debug_message("Networking Event: " + string(command))
 switch(command){
 
     case "HELLO":
+        Network.server_status = "online"
+        Network.timer_start = get_timer()/1000 // got response, reset timeout timer
         server_time = buffer_read(argument0, buffer_string)
         show_debug_message("Server welcomes you @ " + server_time)
         break
+    
+    case "PING":
+        // update ping
+        Network.ping_sent = false;
+        _timer = get_timer()/1000 // get timer once
+        Network.ping = _timer - Network.ping_start
+        Network.ping_start = _timer
+        Network.timer_start = _timer
+        break;
       
     case "LOGIN":
         status = buffer_read(argument0, buffer_string)
         switch(status){
             // log in user
             case "TRUE":
-                target_room =  buffer_read(argument0, buffer_string)
-                target_x =  buffer_read(argument0, buffer_u16)
-                target_y =  buffer_read(argument0, buffer_u16)
+                target_room = buffer_read(argument0, buffer_string)
+                target_x = buffer_read(argument0, buffer_u16)
+                target_y = buffer_read(argument0, buffer_u16)
                 username = buffer_read(argument0, buffer_string)
                 game_role = buffer_read(argument0, buffer_string)
                  
@@ -24,6 +35,7 @@ switch(command){
                 room_goto(goto_room);
                 // Initiate a player object on this room
                 with(instance_create(target_x, target_y, obj_Player)){
+                    visible = false
                     username = other.username
                     game_role = other.game_role
                 }

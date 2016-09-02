@@ -86,15 +86,16 @@ draw_set_font(fnt_HUD)
 draw_set_halign(fa_right)
 
 // draw text
-scr_draw_border_text(display_get_gui_width()-10, 10, "ESC: Exit game", c_white, c_black, 2, 1.0)
 scr_draw_border_text(display_get_gui_width()-10, 30, "M: Mute BGM", c_white, c_black, 2, 1.0)
 scr_draw_border_text(display_get_gui_width()-10, 50, "WASD: Move", c_white, c_black, 2, 1.0)
 scr_draw_border_text(display_get_gui_width()-10, 50, "WASD: Move", c_white, c_black, 2, 1.0)
+
 
 switch(room_get_name(room)){
     
     case "rm_login":
         draw_set_halign(fa_right)
+        scr_draw_border_text(display_get_gui_width()-10, 10, "ESC: Exit game", c_white, c_black, 2, 1.0)
         scr_draw_border_text(display_get_gui_width()/2, 10, 
         "Server status: ", c_white, c_black, 2, 1.0)
         draw_set_halign(fa_left)
@@ -108,6 +109,8 @@ switch(room_get_name(room)){
         break
         
     case "rm_starting_zone":
+        draw_set_halign(fa_right)
+        scr_draw_border_text(display_get_gui_width()-10, 10, "ESC: Logout", c_white, c_black, 2, 1.0)
         draw_set_halign(fa_center)
         scr_draw_border_text(display_get_gui_width()/2, display_get_gui_height()-20, 
             pussytext, c_aqua, c_black, 2, 1.0)
@@ -118,6 +121,7 @@ switch(room_get_name(room)){
 
 // reset text
 draw_set_halign(fa_left)
+scr_draw_border_text(10, 30, "Ping: "+string(Network.ping)+"ms", c_white, c_black, 2, 1.0)
 
 // pussycounter
 if(instance_exists(obj_Player)){
@@ -151,15 +155,23 @@ switch(keyboard_key){
     
     // quit game
     case vk_escape:
-        game_end()
+        if(room_get_name(room) == "rm_login"){
+            game_end()
+        } else {
+            // send logout event
+            var packet = buffer_create(1, buffer_grow, 1)
+            buffer_write(packet, buffer_string, "logout")
+            scr_network_write(Network.TCP_socket, packet, "tcp")
+            with(obj_Player){
+                instance_destroy()
+                room_goto(rm_login)
+            }
+        }
         break
         
     
-    // send a "ping"
+    // 
     case vk_enter:
-        var packet = buffer_create(1, buffer_grow, 1)
-        buffer_write(packet, buffer_string, "ping")
-        scr_network_write(Network.TCP_socket, packet, "tcp")
         break
     
     // mute/unmute bgm

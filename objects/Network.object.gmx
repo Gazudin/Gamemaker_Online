@@ -182,29 +182,22 @@ switch(async_load[? "type"]){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/// Initiate the connetion
+            <string>/// connection
 
 // Instance variables
 savedBuffer = buffer_create(1, buffer_grow, 1)
 reading = 0
 cutBuffer = buffer_create(1, buffer_grow, 1);
-server_status = "offline" // assume server is offline
-timer_start = get_timer()/1000 // milliseconds
-timer = timer_start
-ping_start = 0
-ping = 0
-ping_frequency = 1500// milliseconds between 2 pings
-ping_sent = false
-timeout = 3500 // milliseconds before connection timeout
-ip = "95.143.172.196"
-port = 61027
 
-// configure
-network_connect_raw(TCP_socket, ip, port)
+// Initiate the socket
+TCP_socket = network_create_socket(network_socket_tcp)
+UDP_socket = network_create_socket(network_socket_udp)
 
-event_user(0)
 
-room_goto_next()
+if(server_status == "offline"){
+    network_connect_raw(TCP_socket, ip, port)
+    timer_start = get_timer()/1000 // reset timer
+}
 </string>
           </argument>
         </arguments>

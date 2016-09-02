@@ -170,7 +170,7 @@ switch(keyboard_key){
         break
         
     
-    // send a "ping"
+    // 
     case vk_enter:
         break
     

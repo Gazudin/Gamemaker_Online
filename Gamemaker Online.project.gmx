@@ -60,6 +60,7 @@
       <object>objects\obj_User</object>
     </objects>
     <object>objects\obj_pussy</object>
+    <object>objects\object13</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_init</room>

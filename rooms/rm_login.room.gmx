@@ -58,6 +58,7 @@ draw_set_font(fnt_login);</code>
     <instance objName="obj_btn_Login" x="352" y="512" name="inst_782C09F6" locked="0" code="" scaleX="7" scaleY="2" colour="4294967295" rotation="0"/>
     <instance objName="obj_btn_Register" x="672" y="512" name="inst_7839090E" locked="0" code="" scaleX="7" scaleY="2" colour="4294967295" rotation="0"/>
     <instance objName="System" x="0" y="0" name="inst_1D973765" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="Chat" x="16" y="0" name="inst_A35A3AD2" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
   </instances>
   <tiles/>
   <PhysicsWorld>0</PhysicsWorld>

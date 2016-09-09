@@ -2,7 +2,7 @@
 <object>
   <spriteName>spr_player</spriteName>
   <solid>0</solid>
-  <visible>0</visible>
+  <visible>-1</visible>
   <depth>0</depth>
   <persistent>-1</persistent>
   <parentName>&lt;undefined&gt;</parentName>
@@ -27,9 +27,41 @@
             <kind>1</kind>
             <string>/// initialize
 spd = 4;
-rekt_pussies = 0
 username_x_offset = 0
 username_y_offset = -40
+rekt_pussies = 0
+pos_id = 0
+
+pet = instance_create(x, y, obj_turtle)
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="1" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// destroy pet
+
+if(instance_exists(pet)){
+    with(pet){
+        instance_destroy()
+    }
+}
 </string>
           </argument>
         </arguments>
@@ -54,54 +86,66 @@ username_y_offset = -40
             <kind>1</kind>
             <string>/// movement
 
-target_x = x
-target_y = y
+// don't move if typing
+if(!Chat.typing){
 
-up = keyboard_check(ord('W'))
-down = keyboard_check(ord('S'))
-left = keyboard_check(ord('A'))
-right = keyboard_check(ord('D'))
+    target_x = x
+    target_y = y
+    up = keyboard_check(ord('W'))
+    down = keyboard_check(ord('S'))
+    left = keyboard_check(ord('A'))
+    right = keyboard_check(ord('D'))
 
-if(up){
-    target_y -= spd
-}
-if(down){
-    target_y += spd
-}
-if(left){
-    target_x -= spd;
-}
-if(right){
-    target_x += spd
+    if(up){
+        target_y -= spd
+    }
+    if(down){
+        target_y += spd
+    }
+    if(left){
+        target_x -= spd;
+    }
+    if(right){
+        target_x += spd
+    }
+    
+    // make sure not to go out of bounds
+    if(target_x &lt; 0){
+        target_x = 0
+    } else if(target_x &gt; room_width){
+        target_x = room_width
+    }
+    if(target_y &lt; 0){
+        target_y = 0
+    } else if(target_y &gt; room_height){
+        target_y = room_height
+    }
+    
+    // if moved, update position
+    if(target_x != x || target_y != y){   
+        x = target_x
+        y = target_y
+    
+       /*var packet = buffer_create(1, buffer_grow, 1);
+        buffer_write(packet, buffer_string, "pos");
+        buffer_write(packet, buffer_string, room_get_name(room));
+        buffer_write(packet, buffer_u32, x);
+        buffer_write(packet, buffer_u32, y);
+        pos_id += 1
+        
+        scr_network_write(Network.UDP_socket, packet, "udp");
+        */
+        
+        var packet = buffer_create(1, buffer_grow, 1);
+        buffer_write(packet, buffer_string, "pos");
+        buffer_write(packet, buffer_u32, x);
+        buffer_write(packet, buffer_u32, y);
+        
+        scr_network_write(Network.TCP_socket, packet, "tcp");
+    }
 }
 
-// make sure not to go out of bounds
-if(target_x &lt; 0){
-    target_x = 0
-} else if(target_x &gt; room_width){
-    target_x = room_width
-}
-if(target_y &lt; 0){
-    target_y = 0
-} else if(target_y &gt; room_height){
-    target_y = room_height
-}
 
-// if moved, update position
-if(target_x != x || target_y != y){   
-    x = target_x
-    y = target_y
-
-    var packet = buffer_create(1, buffer_grow, 1);
-    buffer_write(packet, buffer_string, "pos");
-    buffer_write(packet, buffer_u32, x);
-    buffer_write(packet, buffer_u32, y);
-   
-    //this is working --&gt; 
-    scr_network_write(Network.TCP_socket, packet, "tcp");
-    // but this doesn't seem to reach server 
-    //scr_network_write(Network.UDP_socket, packet, "udp");
-}
 
 </string>
           </argument>
@@ -125,12 +169,20 @@ if(target_x != x || target_y != y){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/// make visible
-if(room_get_name(room) != "rm_login"){
-    visible = true
-} else {
-    visible = false
+            <string>/// update the room
+
+var packet = buffer_create(1, buffer_grow, 1);
+buffer_write(packet, buffer_string, "enter");
+buffer_write(packet, buffer_u32, x);
+buffer_write(packet, buffer_u32, y);
+
+scr_network_write(Network.TCP_socket, packet, "tcp");
+//scr_network_write(Network.UDP_socket, packet, "udp");
+
+if(!instance_exists(obj_turtle)){
+    instance_create(x, y, obj_turtle)
 }
+
 </string>
           </argument>
         </arguments>

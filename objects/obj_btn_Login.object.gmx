@@ -79,14 +79,16 @@ event_user(0)
             <string>/// send login data
 event_inherited();
 
-if( string_length(obj_txt_Username.text) &gt; 0 &amp;&amp; string_length(obj_txt_Password.text) &gt; 0){
+if(string_length(obj_txt_Username.text) &gt; 0 &amp;&amp; string_length(obj_txt_Password.text) &gt; 0){
    
-   var login_packet = buffer_create(1, buffer_grow, 1);
-   buffer_write(login_packet, buffer_string, "login");
-   buffer_write(login_packet, buffer_string, obj_txt_Username.text);
-   buffer_write(login_packet, buffer_string, obj_txt_Password.text);
+   var packet = buffer_create(1, buffer_grow, 1)
+   buffer_write(packet, buffer_string, "login")
+   buffer_write(packet, buffer_string, obj_txt_Username.text)
+   buffer_write(packet, buffer_string, obj_txt_Password.text)
+   buffer_write(packet, buffer_u32, Network.random_udp_port)
    
-   scr_network_write(Network.TCP_socket, login_packet, "tcp");
+   //scr_network_write(Network.UDP_socket, packet, "udp")
+   scr_network_write(Network.TCP_socket, packet, "tcp")
 
 }else{
    show_message("Error: Username/Password cannot be blank...");

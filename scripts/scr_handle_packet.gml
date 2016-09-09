@@ -6,19 +6,19 @@ switch(command){
 
     case "HELLO":
         Network.server_status = "online"
-        Network.timer_start = get_timer()/1000 // got response, reset timeout timer
         server_time = buffer_read(argument0, buffer_string)
         show_debug_message("Server welcomes you @ " + server_time)
         break
+
     
     case "PING":
         // update ping
         Network.ping_sent = false;
-        _timer = get_timer()/1000 // get timer once
+        var _timer = get_timer()/1000 // get timer once
         Network.ping = _timer - Network.ping_start
         Network.ping_start = _timer
-        Network.timer_start = _timer
         break;
+        
       
     case "LOGIN":
         status = buffer_read(argument0, buffer_string)
@@ -35,15 +35,20 @@ switch(command){
                 room_goto(goto_room);
                 // Initiate a player object on this room
                 with(instance_create(target_x, target_y, obj_Player)){
-                    visible = false
                     username = other.username
                     game_role = other.game_role
+                    
+                    var packet = buffer_create(1, buffer_grow, 1);
+                    buffer_write(packet, buffer_string, "enter room");
+                    buffer_write(packet, buffer_string, other.target_room);
+                    scr_network_write(Network.TCP_socket, packet, "tcp");
                 }
                 break; 
             // deny login
             case "FALSE":
                 show_message("Login Failed: User doesn't exist or password incorrect");
                 break;
+                
             // user already logged in
             case "INGAME":
                 show_message("Login Failed: User is already logged in!")
@@ -98,11 +103,22 @@ switch(command){
         
         break
         
+    // other user leaves the room
+    case "LEAVE ROOM":
+        username = buffer_read(argument0, buffer_string)
+        with(obj_User){
+            if(username == other.username){
+                instance_destroy()
+                break
+            }
+        }
+        break
+        
     // other user updates position
     case "POS":
         username = buffer_read(argument0, buffer_string)
-        pos_x = buffer_read(argument0, buffer_u16)
-        pos_y = buffer_read(argument0, buffer_u16)
+        target_x = buffer_read(argument0, buffer_u16)
+        target_y = buffer_read(argument0, buffer_u16)
         
         foundPlayer = -1
         
@@ -117,14 +133,22 @@ switch(command){
         if(foundPlayer != -1){
             // then move user
             with(foundPlayer){
-                x = other.pos_x
-                y = other.pos_y
+                target_x = other.target_x
+                target_y = other.target_y
             }
         // if not, create the user
         } else {
-            with(instance_create(pos_x, pos_y, obj_User)){
+            with(instance_create(target_x, target_y, obj_User)){
                 username = other.username
             }
+        }
+        break
+        
+    case "CHAT":
+        message = buffer_read(argument0, buffer_string)
+        if(instance_exists(Chat)){
+            show_message("receivec message")
+            ds_list_add(Chat.chat_log, message)
         }
         break
     
@@ -140,11 +164,9 @@ switch(command){
                 instance_destroy()
             }
         }
-        if(!instance_exists(obj_pussy)){
-            instance_create(xx, yy, obj_pussy)
-        }
+        
+        instance_create(xx, yy, obj_pussy)
         
         break
-
         
 }

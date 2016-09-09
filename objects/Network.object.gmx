@@ -26,7 +26,7 @@
           <argument>
             <kind>1</kind>
             <string>/// Initiate the connetion
-
+randomize() // for random_udp_port
 // Instance variables
 savedBuffer = buffer_create(1, buffer_grow, 1)
 reading = 0
@@ -40,11 +40,13 @@ ping_frequency = 1500// milliseconds between 2 pings
 ping_sent = false
 timeout = 3500 // milliseconds before connection timeout
 ip = "95.143.172.196"
-port = 61027
+tcp_port = 61027
+udp_port = 61954
 
 // configure
-network_set_config(network_config_use_non_blocking_socket, 1) // don't block on socket
+network_set_config(network_config_use_non_blocking_socket, 1) // don't block on connection
 
+// start sending packets
 event_user(0)
 
 room_goto_next()
@@ -75,25 +77,27 @@ room_goto_next()
 timer = get_timer()/1000 - timer_start
 
 if(timer &gt;= ping_frequency &amp;&amp; server_status == "online" &amp;&amp; ping_sent == false){
-
+    // restart ping timer
     ping_start = get_timer()/1000
     // send new ping
     var packet = buffer_create(1, buffer_grow, 1);
     buffer_write(packet, buffer_string, "ping");
     ping_sent = true
+    //scr_network_write(Network.UDP_socket, packet, "udp");
     scr_network_write(Network.TCP_socket, packet, "tcp");
     
 } else if(timer &gt;= timeout){
-    switch(Network.server_status){
+    switch(server_status){
         
         case "online":
             server_status = "offline"
             ping = 0
             show_message("Connection timeout!")
-            // send logout event
-            var packet = buffer_create(1, buffer_grow, 1)
-            buffer_write(packet, buffer_string, "logout")
-            scr_network_write(Network.TCP_socket, packet, "tcp")
+            // destroy sockets before creating new ones
+            network_destroy(UDP_socket)
+            network_destroy(TCP_socket)
+            
+            // destroy player and go bacl to login screen
             with(obj_Player){
                 instance_destroy()
                 room_goto(rm_login)
@@ -101,6 +105,7 @@ if(timer &gt;= ping_frequency &amp;&amp; server_status == "online" &amp;&amp; pi
             break
         
         case "offline":
+            // try to re-connect
             event_user(0)
             break 
     }
@@ -131,34 +136,37 @@ if(timer &gt;= ping_frequency &amp;&amp; server_status == "online" &amp;&amp; pi
 
 switch(async_load[? "type"]){
 
-   case network_type_data:
-      buffer_copy(async_load[? "buffer"], 0, async_load[? "size"], savedBuffer, buffer_tell(savedBuffer));
-      buffer_seek(savedBuffer, buffer_seek_relative, async_load[? "size"] + 1);
+    case network_type_data:
+        // received data, reset timeout timer
+        timer_start = get_timer()/1000
+
+        buffer_copy(async_load[? "buffer"], 0, async_load[? "size"], savedBuffer, buffer_tell(savedBuffer));
+        buffer_seek(savedBuffer, buffer_seek_relative, async_load[? "size"] + 1);
       
-      while(true){
+        while(true){
          
-         var size = buffer_peek(savedBuffer, reading, buffer_u8);
+            var size = buffer_peek(savedBuffer, reading, buffer_u8);
          
-         if(buffer_get_size(savedBuffer) &gt;= reading + size){
+            if(buffer_get_size(savedBuffer) &gt;= reading + size){
          
-            buffer_copy(savedBuffer, reading, size, cutBuffer, 0);
-            buffer_seek(cutBuffer, 0, 1);
+                buffer_copy(savedBuffer, reading, size, cutBuffer, 0);
+                buffer_seek(cutBuffer, 0, 1);
             
-            scr_handle_packet(cutBuffer);
+                scr_handle_packet(cutBuffer);
             
-            if(buffer_get_size(savedBuffer) != reading+size){
-               reading += size;
-            }else {
-               buffer_resize(savedBuffer, 1);
-               reading = 0;
-               break;
+                if(buffer_get_size(savedBuffer) != reading+size){
+                    reading += size;
+                }else {
+                    buffer_resize(savedBuffer, 1);
+                    reading = 0;
+                    break;
+                }
+         
+            }else{
+                break;
             }
-         
-         }else{
-            break;
-         }
-      }
-      break;
+        }
+        break;
 }
 </string>
           </argument>
@@ -191,11 +199,22 @@ cutBuffer = buffer_create(1, buffer_grow, 1);
 
 // Initiate the socket
 TCP_socket = network_create_socket(network_socket_tcp)
-UDP_socket = network_create_socket(network_socket_udp)
+// generate random port range
+random_udp_port = irandom_range(5000, 65000)
+UDP_socket = network_create_socket_ext(network_socket_udp, random_udp_port);
 
 
 if(server_status == "offline"){
-    network_connect_raw(TCP_socket, ip, port)
+    
+    show_debug_message("try connect(user event0)")
+
+    //var packet = buffer_create(1, buffer_grow, 1)
+    //buffer_write(packet, buffer_string, "connect")
+    //scr_network_write(UDP_socket, packet, "udp")
+    
+    ping_sent = false
+    network_connect_raw(TCP_socket, ip, tcp_port)
+
     timer_start = get_timer()/1000 // reset timer
 }
 </string>

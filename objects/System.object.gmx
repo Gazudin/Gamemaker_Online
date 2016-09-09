@@ -61,6 +61,36 @@ if(!audio_is_playing(bgm)){
         </arguments>
       </action>
     </event>
+    <event eventtype="7" enumb="3">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// notify server
+
+// send game end packet
+var packet = buffer_create(1, buffer_grow, 1)
+buffer_write(packet, buffer_string, "end")
+//scr_network_write(Network.UDP_socket, packet, "udp")
+scr_network_write(Network.TCP_socket, packet, "tcp")
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
     <event eventtype="8" enumb="64">
       <action>
         <libid>1</libid>
@@ -84,6 +114,7 @@ if(!audio_is_playing(bgm)){
 // configure text
 draw_set_font(fnt_HUD)
 draw_set_halign(fa_right)
+draw_set_valign(fa_top)
 
 // draw text
 scr_draw_border_text(display_get_gui_width()-10, 30, "M: Mute BGM", c_white, c_black, 2, 1.0)
@@ -111,8 +142,7 @@ switch(room_get_name(room)){
     case "rm_starting_zone":
         draw_set_halign(fa_right)
         scr_draw_border_text(display_get_gui_width()-10, 10, "ESC: Logout", c_white, c_black, 2, 1.0)
-        draw_set_halign(fa_center)
-        scr_draw_border_text(display_get_gui_width()/2, display_get_gui_height()-20, 
+        scr_draw_border_text(display_get_gui_width(), display_get_gui_height()-20, 
             pussytext, c_aqua, c_black, 2, 1.0)
         break
 
@@ -156,11 +186,13 @@ switch(keyboard_key){
     // quit game
     case vk_escape:
         if(room_get_name(room) == "rm_login"){
+            // send game end packet
             game_end()
         } else {
             // send logout event
             var packet = buffer_create(1, buffer_grow, 1)
             buffer_write(packet, buffer_string, "logout")
+            //scr_network_write(Network.UDP_socket, packet, "udp")
             scr_network_write(Network.TCP_socket, packet, "tcp")
             with(obj_Player){
                 instance_destroy()
@@ -176,10 +208,15 @@ switch(keyboard_key){
     
     // mute/unmute bgm
     case ord('M'):
-        if(!audio_is_paused(bgm)){
-            audio_pause_sound(bgm)
-        } else {
-            audio_resume_sound(bgm)
+        // if not typing in chat
+        if(instance_exists(Chat)){
+            if(!Chat.typing){
+                if(!audio_is_paused(bgm)){
+                    audio_pause_sound(bgm)
+                } else {
+                    audio_resume_sound(bgm)
+                }
+            }
         }
         break
 

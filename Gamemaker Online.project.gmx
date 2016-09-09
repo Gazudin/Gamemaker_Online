@@ -15,6 +15,7 @@
       <sprite>sprites\spr_player</sprite>
     </sprites>
     <sprite>sprites\spr_pussy</sprite>
+    <sprite>sprites\spr_turtle</sprite>
   </sprites>
   <backgrounds name="background">
     <background>background\bg_connecting</background>
@@ -30,6 +31,7 @@
   </scripts>
   <fonts name="fonts">
     <font>fonts\fnt_login</font>
+    <font>fonts\fnt_chat</font>
     <font>fonts\fnt_HUD</font>
     <font>fonts\fnt_debug</font>
     <font>fonts\fnt_user_name</font>
@@ -37,6 +39,7 @@
   <objects name="objects">
     <objects name="System">
       <object>objects\System</object>
+      <object>objects\Chat</object>
     </objects>
     <objects name="Sockets">
       <object>objects\Network</object>
@@ -60,7 +63,7 @@
       <object>objects\obj_User</object>
     </objects>
     <object>objects\obj_pussy</object>
-    <object>objects\object13</object>
+    <object>objects\obj_turtle</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_init</room>

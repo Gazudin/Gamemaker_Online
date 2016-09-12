@@ -6,6 +6,7 @@
   <NewExtensions/>
   <sounds name="sound">
     <sound>sound\bgm_ragnarok</sound>
+    <sound>sound\bgm_wild_arms_overworld</sound>
   </sounds>
   <sprites name="sprites">
     <sprites name="UI Framework">

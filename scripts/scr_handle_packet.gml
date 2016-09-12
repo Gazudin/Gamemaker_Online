@@ -33,6 +33,9 @@ switch(command){
                  
                 goto_room = asset_get_index(target_room);
                 room_goto(goto_room);
+                audio_stop_sound(System.bgm);
+                System.bgm = bgm_wild_arms_overworld;
+                audio_play_sound(System.bgm, 5, true);
                 // Initiate a player object on this room
                 with(instance_create(target_x, target_y, obj_Player)){
                     username = other.username
@@ -43,7 +46,10 @@ switch(command){
                     buffer_write(packet, buffer_string, other.target_room);
                     scr_network_write(Network.TCP_socket, packet, "tcp");
                 }
-                break; 
+                if(!instance_exists(Chat)){
+                    instance_create(0,0,Chat)
+                }
+                break 
             // deny login
             case "FALSE":
                 show_message("Login Failed: User doesn't exist or password incorrect");
@@ -71,7 +77,6 @@ switch(command){
         username = buffer_read(argument0, buffer_string)
         pos_x = buffer_read(argument0, buffer_u16)
         pos_y = buffer_read(argument0, buffer_u16)
-        
         // is user already in room
         foundUser = -1
         with(obj_User){
@@ -80,7 +85,6 @@ switch(command){
                 break
             }
         }
-        
         // didn't find the user, create it
         if(foundUser == -1){
             with(instance_create(pos_x, pos_y, obj_User)){
@@ -100,7 +104,6 @@ switch(command){
                 break
             }
         }
-        
         break
         
     // other user leaves the room

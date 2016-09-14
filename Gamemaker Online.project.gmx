@@ -14,15 +14,21 @@
     </sprites>
     <sprites name="Players">
       <sprite>sprites\spr_player</sprite>
+      <sprite>sprites\spr_player_right</sprite>
+      <sprite>sprites\spr_player_down</sprite>
+      <sprite>sprites\spr_player_left</sprite>
+      <sprite>sprites\spr_player_up</sprite>
+      <sprite>sprites\spr_player_attack_down</sprite>
+      <sprite>sprites\spr_player_attack_right</sprite>
+      <sprite>sprites\spr_player_attack_left</sprite>
+      <sprite>sprites\spr_player_attack_up</sprite>
     </sprites>
     <sprite>sprites\spr_pussy</sprite>
     <sprite>sprites\spr_turtle</sprite>
     <sprite>sprites\spr_wall</sprite>
-    <sprite>sprites\spr_player_down</sprite>
-    <sprite>sprites\spr_player_right</sprite>
-    <sprite>sprites\spr_player_up</sprite>
-    <sprite>sprites\spr_player_left</sprite>
     <sprite>sprites\spr_player_shadow</sprite>
+    <sprite>sprites\spr_enemy_slime</sprite>
+    <sprite>sprites\spr_damage</sprite>
   </sprites>
   <backgrounds name="background">
     <background>background\bg_connecting</background>
@@ -31,10 +37,18 @@
   </backgrounds>
   <paths name="paths"/>
   <scripts name="scripts">
-    <script>scripts\scr_draw_border_text.gml</script>
     <scripts name="Network">
       <script>scripts\scr_network_write.gml</script>
       <script>scripts\scr_handle_packet.gml</script>
+    </scripts>
+    <scripts name="Helper scripts">
+      <script>scripts\scr_get_input.gml</script>
+      <script>scripts\scr_draw_border_text.gml</script>
+    </scripts>
+    <scripts name="Player states">
+      <script>scripts\scr_move_state.gml</script>
+      <script>scripts\scr_dash_state.gml</script>
+      <script>scripts\scr_attack_state.gml</script>
     </scripts>
   </scripts>
   <fonts name="fonts">
@@ -48,6 +62,7 @@
     <objects name="System">
       <object>objects\System</object>
       <object>objects\Chat</object>
+      <object>objects\View</object>
     </objects>
     <objects name="Sockets">
       <object>objects\Network</object>
@@ -68,11 +83,15 @@
     </objects>
     <objects name="Players">
       <object>objects\obj_player</object>
-      <object>objects\obj_User</object>
+      <object>objects\obj_user</object>
     </objects>
     <object>objects\obj_pussy</object>
     <object>objects\obj_turtle</object>
     <object>objects\obj_wall</object>
+    <object>objects\obj_dash_effect</object>
+    <object>objects\obj_enemy_slime</object>
+    <object>objects\obj_lifeform_parent</object>
+    <object>objects\obj_damage</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_init</room>

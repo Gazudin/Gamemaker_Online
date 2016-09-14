@@ -205,8 +205,6 @@ UDP_socket = network_create_socket_ext(network_socket_udp, random_udp_port);
 
 
 if(server_status == "offline"){
-    
-    show_debug_message("try connect(user event0)")
 
     //var packet = buffer_create(1, buffer_grow, 1)
     //buffer_write(packet, buffer_string, "connect")

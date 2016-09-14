@@ -117,24 +117,23 @@ switch(room_get_name(room)){
         draw_set_color(c_aqua)
         draw_text(1, (display_get_gui_height()-chat_input_height/2), text)
         // draw
-        chat_size = ds_list_size(chat_log)
+        chat_size = ds_list_size(chat_log);
         for(var i = chat_size-1; i &gt;= max(0, chat_size-chat_log_lines); i -= 1){
-            var chat_str = ds_list_find_value(chat_log, i)
-            show_debug_message("System in chat_str: " + string(string_pos("System:", chat_str)))
+            var chat_str = ds_list_find_value(chat_log, i);
             if(string_pos("System:", chat_str) == 1){
-                draw_set_color(c_yellow)
+                draw_set_color(c_yellow);
             }else{
-                draw_set_color(c_aqua)
+                draw_set_color(c_aqua);
             }
             draw_text(1, (display_get_gui_height()-chat_input_height/2)-((chat_size-i)*chat_input_height),
-                chat_str)
+                chat_str);
         }
         break
 }
 
 // reset text
-draw_set_halign(fa_left)
-draw_set_valign(fa_top)
+draw_set_halign(fa_left);
+draw_set_valign(fa_top);
 </string>
           </argument>
         </arguments>
@@ -167,9 +166,6 @@ if(keyboard_key == vk_enter){
         if(text != ""){
             text = obj_player.username+": "+text
             var length = string_length(text)
-            for(var i = 0; i &lt; length; i+=1){
-                show_debug_message("Index "+string(i)+":"+string_char_at(text, i))
-            }
             // "/" initiates a command
             if(string_char_at(text, string_length(obj_player.username)+3) == "/"){
                 var command = string_delete(text, 1, string_pos("/", text))

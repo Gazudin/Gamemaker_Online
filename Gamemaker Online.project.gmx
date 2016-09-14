@@ -17,10 +17,17 @@
     </sprites>
     <sprite>sprites\spr_pussy</sprite>
     <sprite>sprites\spr_turtle</sprite>
+    <sprite>sprites\spr_wall</sprite>
+    <sprite>sprites\spr_player_down</sprite>
+    <sprite>sprites\spr_player_right</sprite>
+    <sprite>sprites\spr_player_up</sprite>
+    <sprite>sprites\spr_player_left</sprite>
+    <sprite>sprites\spr_player_shadow</sprite>
   </sprites>
   <backgrounds name="background">
     <background>background\bg_connecting</background>
     <background>background\bg_Title</background>
+    <background>background\bg_grass</background>
   </backgrounds>
   <paths name="paths"/>
   <scripts name="scripts">
@@ -65,6 +72,7 @@
     </objects>
     <object>objects\obj_pussy</object>
     <object>objects\obj_turtle</object>
+    <object>objects\obj_wall</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_init</room>

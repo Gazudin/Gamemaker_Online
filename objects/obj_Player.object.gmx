@@ -39,7 +39,7 @@ image_speed = 0;
 attacked = false;
 scr_get_input();
 state = scr_move_state;
-
+face = RIGHT;
 
 old_x = x;
 old_y = y;
@@ -47,6 +47,8 @@ username_x_offset = 0;
 username_y_offset = -sprite_height/2;
 rekt_pussies = 0;
 
+// Initzialize stats
+instance_create(0, 0, obj_player_stats);
 
 // Create the View
 instance_create(x, y, View);
@@ -78,6 +80,12 @@ pet = instance_create(x, y, obj_turtle);
             <string>/// destroy pet
 if(instance_exists(pet)){
     with(pet){
+        instance_destroy();
+    }
+}
+
+if(instance_exists(obj_player_stats)){
+    with(obj_player_stats){
         instance_destroy();
     }
 }
@@ -128,12 +136,18 @@ state = scr_move_state;
           <argument>
             <kind>1</kind>
             <string>/// Move the player in the step event
-event_inherited();
+depth = -y;
 
-// don't act if typing
+// Don't act if typing
 if(!Chat.typing){
     script_execute(state);
 }
+
+if(obj_player_stats.hp &lt;= 0){
+  instance_destroy();
+}
+
+
 
 
 
@@ -227,21 +241,16 @@ if(!instance_exists(obj_turtle)){
 draw_sprite(spr_player_shadow, image_index, x, y);
 draw_self();
 
-// configure font
+// Configure font
 draw_set_font(fnt_user_name);
 draw_set_halign(fa_center);
 draw_set_valign(fa_bottom);
 
-// draw shadow
-draw_text_colour(phy_position_x+username_x_offset+1, phy_position_y+username_y_offset, username, c_black, c_black, c_black, c_black, 1.0)
-draw_text_colour(phy_position_x+username_x_offset-1, phy_position_y+username_y_offset, username, c_black, c_black, c_black, c_black, 1.0)
-draw_text_colour(phy_position_x+username_x_offset, phy_position_y+username_y_offset+1, username, c_black, c_black, c_black, c_black, 1.0)
-draw_text_colour(phy_position_x+username_x_offset, phy_position_y+username_y_offset-1, username, c_black, c_black, c_black, c_black, 1.0)
-
-// draw inner
-draw_text_colour(phy_position_x+username_x_offset, phy_position_y+username_y_offset, username, c_white, c_white, c_white, c_white, 1.0)
-
-// reset font
+// Draw name
+scr_draw_border_text(phy_position_x+username_x_offset, phy_position_y+username_y_offset,
+  username, c_white, c_black, 1, 1.0);
+  
+// Reset font
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);
 
@@ -257,7 +266,7 @@ draw_set_valign(fa_top);
   <PhysicsObjectDensity>0.5</PhysicsObjectDensity>
   <PhysicsObjectRestitution>0.100000001490116</PhysicsObjectRestitution>
   <PhysicsObjectGroup>0</PhysicsObjectGroup>
-  <PhysicsObjectLinearDamping>0.100000001490116</PhysicsObjectLinearDamping>
+  <PhysicsObjectLinearDamping>5</PhysicsObjectLinearDamping>
   <PhysicsObjectAngularDamping>0.100000001490116</PhysicsObjectAngularDamping>
   <PhysicsObjectFriction>0.200000002980232</PhysicsObjectFriction>
   <PhysicsObjectAwake>-1</PhysicsObjectAwake>

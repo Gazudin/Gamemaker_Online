@@ -2,7 +2,7 @@
 <object>
   <spriteName>spr_damage</spriteName>
   <solid>0</solid>
-  <visible>-1</visible>
+  <visible>0</visible>
   <depth>0</depth>
   <persistent>0</persistent>
   <parentName>&lt;undefined&gt;</parentName>
@@ -79,6 +79,71 @@ instance_destroy();
             <string>/// Damage all lifeforms
 if(other.id != creator){
   other.hp -= damage;
+  
+  // Apply the knockback
+  var dir = point_direction(creator.x, creator.y, other.x, other.y);
+  var xforce = lengthdir_x(knockback, dir);
+  var yforce = lengthdir_y(knockback, dir);
+  with(other){
+    physics_apply_impulse(x, y, xforce, yforce);
+  }
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="4" ename="obj_turtle">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// Don't damage TURDLE :'(
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="4" ename="obj_player">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// Damage all lifeforms
+if(other.id != creator){
+  obj_player_stats.hp -= damage;
+  
+  // Apply the knockback
+  var dir = point_direction(creator.x, creator.y, other.x, other.y);
+  var xforce = lengthdir_x(knockback, dir);
+  var yforce = lengthdir_y(knockback, dir);
+  with(other){
+    physics_apply_impulse(x, y, xforce, yforce);
+  }
 }
 </string>
           </argument>

@@ -112,50 +112,50 @@ scr_network_write(Network.TCP_socket, packet, "tcp")
 
 
 // configure text
-draw_set_font(fnt_HUD)
-draw_set_halign(fa_right)
-draw_set_valign(fa_top)
+draw_set_font(fnt_HUD);
+draw_set_halign(fa_right);
+draw_set_valign(fa_top);
 
 // draw text
-scr_draw_border_text(display_get_gui_width()-10, 30, "M: Mute BGM", c_white, c_black, 2, 1.0)
-scr_draw_border_text(display_get_gui_width()-10, 50, "WASD: Move", c_white, c_black, 2, 1.0)
-scr_draw_border_text(display_get_gui_width()-10, 50, "WASD: Move", c_white, c_black, 2, 1.0)
-
+scr_draw_border_text(display_get_gui_width()-10, 30, "M: Mute BGM", c_white, c_black, 1, 1.0);
+scr_draw_border_text(display_get_gui_width()-10, 50, "Arrow keys: Move", c_white, c_black, 1, 1.0);
 
 switch(room_get_name(room)){
     
     case "rm_login":
         draw_set_halign(fa_right)
-        scr_draw_border_text(display_get_gui_width()-10, 10, "ESC: Exit game", c_white, c_black, 2, 1.0)
+        scr_draw_border_text(display_get_gui_width()-10, 10, "ESC: Exit game", c_white, c_black, 1, 1.0)
         scr_draw_border_text(display_get_gui_width()/2, 10, 
-        "Server status: ", c_white, c_black, 2, 1.0)
-        draw_set_halign(fa_left)
+        "Server status: ", c_white, c_black, 1, 1.0);
+        draw_set_halign(fa_left);
         if(Network.server_status == "online"){
             scr_draw_border_text(display_get_gui_width()/2, 10, 
-            Network.server_status, c_green, c_black, 2, 1.0)
+            Network.server_status, c_green, c_black, 1, 1.0);
         } else {
             scr_draw_border_text(display_get_gui_width()/2, 10, 
-            Network.server_status, c_red, c_black, 2, 1.0)
+            Network.server_status, c_red, c_black, 1, 1.0);
         }
-        break
+        break;
         
     case "rm_starting_zone":
         draw_set_halign(fa_right)
-        scr_draw_border_text(display_get_gui_width()-10, 10, "ESC: Logout", c_white, c_black, 2, 1.0)
+        scr_draw_border_text(display_get_gui_width()-10, 10, "ESC: Logout", c_white, c_black, 1, 1.0);
         scr_draw_border_text(display_get_gui_width(), display_get_gui_height()-20, 
-            pussytext, c_aqua, c_black, 2, 1.0)
-        break
+            pussytext, c_aqua, c_black, 1, 1.0);
+        break;
 
 }
 
 
 // reset text
-draw_set_halign(fa_left)
-scr_draw_border_text(10, 30, "Ping: "+string(Network.ping)+"ms", c_white, c_black, 2, 1.0)
+draw_set_halign(fa_left);
+scr_draw_border_text(10, 10, "Ping: "+string(Network.ping)+"ms",
+  c_white, c_black, 1, 1.0);
 
 // pussycounter
 if(instance_exists(obj_player)){
-    scr_draw_border_text(10, 10, "rekt pussies: " + string(obj_player.rekt_pussies), c_white, c_black, 2, 1.0)
+  scr_draw_border_text(10, 30, "rekt pussies: " + string(obj_player.rekt_pussies), 
+    c_white, c_black, 1, 1.0);
 }
 </string>
           </argument>

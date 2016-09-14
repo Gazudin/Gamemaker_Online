@@ -27,7 +27,59 @@
             <kind>1</kind>
             <string>/// Initialize the slime
 event_inherited();
-spd = .7;
+image_speed = .1;
+spd = .3;
+state = scr_enemy_idle_state;
+alarm[0] = room_speed*irandom_range(2, 5);
+sight = 80;
+targetX = 0;
+targetY = 0;
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="2" enumb="1">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// Stall alarm
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="2" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// Wander alarm
 </string>
           </argument>
         </arguments>
@@ -52,9 +104,39 @@ spd = .7;
             <kind>1</kind>
             <string>/// Move towards the player
 event_inherited();
-if(instance_exists(obj_player)){
-  phy_position_x += sign(obj_player.x - x)*spd;
-  phy_position_y += sign(obj_player.y - y)*spd;
+script_execute(state);
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="4" ename="obj_player">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// Damage the player
+if(state != scr_enemy_stall_state){
+  var dir = point_direction(other.x, other.y, x, y);
+  var xdir = lengthdir_x(1, dir);
+  var ydir = lengthdir_y(1, dir);
+  var damage = instance_create(other.x+xdir, other.y+ydir, obj_damage);
+  damage.creator = id;
+  damage.knockback = 5;
+  state = scr_enemy_stall_state;
+  alarm[1] = room_speed;
 }
 </string>
           </argument>
@@ -68,7 +150,7 @@ if(instance_exists(obj_player)){
   <PhysicsObjectDensity>0.5</PhysicsObjectDensity>
   <PhysicsObjectRestitution>0.100000001490116</PhysicsObjectRestitution>
   <PhysicsObjectGroup>0</PhysicsObjectGroup>
-  <PhysicsObjectLinearDamping>0.100000001490116</PhysicsObjectLinearDamping>
+  <PhysicsObjectLinearDamping>5</PhysicsObjectLinearDamping>
   <PhysicsObjectAngularDamping>0.100000001490116</PhysicsObjectAngularDamping>
   <PhysicsObjectFriction>0.200000002980232</PhysicsObjectFriction>
   <PhysicsObjectAwake>-1</PhysicsObjectAwake>

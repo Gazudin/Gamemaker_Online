@@ -60,7 +60,7 @@
       </objects>
     </objects>
     <objects name="Players">
-      <object>objects\obj_Player</object>
+      <object>objects\obj_player</object>
       <object>objects\obj_User</object>
     </objects>
     <object>objects\obj_pussy</object>

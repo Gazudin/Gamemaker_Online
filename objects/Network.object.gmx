@@ -98,7 +98,7 @@ if(timer &gt;= ping_frequency &amp;&amp; server_status == "online" &amp;&amp; pi
             network_destroy(TCP_socket)
             
             // destroy player and go bacl to login screen
-            with(obj_Player){
+            with(obj_player){
                 instance_destroy()
                 room_goto(rm_login)
             }

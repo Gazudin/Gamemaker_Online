@@ -50,17 +50,17 @@ flag = false
           <argument>
             <kind>1</kind>
             <string>/// collide with player
-if(distance_to_object(obj_Player) &lt;= 5 &amp;&amp; !flag){
+if(distance_to_object(obj_player) &lt;= 5 &amp;&amp; !flag){
 
     flag = true // don't trigger again
     
     var packet = buffer_create(1, buffer_grow, 1);
     buffer_write(packet, buffer_string, "pussy");
-    buffer_write(packet, buffer_string, obj_Player.username);
+    buffer_write(packet, buffer_string, obj_player.username);
    
     scr_network_write(Network.TCP_socket, packet, "tcp");
     
-    obj_Player.rekt_pussies += 1
+    obj_player.rekt_pussies += 1
     
     instance_destroy()
 }

@@ -37,7 +37,7 @@ switch(command){
                 System.bgm = bgm_wild_arms_overworld;
                 audio_play_sound(System.bgm, 5, true);
                 // Initiate a player object on this room
-                with(instance_create(target_x, target_y, obj_Player)){
+                with(instance_create(target_x, target_y, obj_player)){
                     username = other.username
                     game_role = other.game_role
                     
@@ -79,7 +79,7 @@ switch(command){
         pos_y = buffer_read(argument0, buffer_u16)
         // is user already in room
         foundUser = -1
-        with(obj_User){
+        with(obj_user){
             if(username == other.username){
                 foundUser = id
                 break
@@ -87,7 +87,7 @@ switch(command){
         }
         // didn't find the user, create it
         if(foundUser == -1){
-            with(instance_create(pos_x, pos_y, obj_User)){
+            with(instance_create(pos_x, pos_y, obj_user)){
                 username = other.username
                 x = other.pos_x
                 y = other.pos_y
@@ -98,7 +98,7 @@ switch(command){
     // other user logged out
     case "LOGOUT":
         username = buffer_read(argument0, buffer_string)
-        with(obj_User){
+        with(obj_user){
             if(username == other.username){
                 instance_destroy()
                 break
@@ -109,7 +109,7 @@ switch(command){
     // other user leaves the room
     case "LEAVE ROOM":
         username = buffer_read(argument0, buffer_string)
-        with(obj_User){
+        with(obj_user){
             if(username == other.username){
                 instance_destroy()
                 break
@@ -126,7 +126,7 @@ switch(command){
         foundPlayer = -1
         
         // check if that user is already created
-        with(obj_User){
+        with(obj_user){
             if(username == other.username){
                 other.foundPlayer = id
                 break
@@ -141,7 +141,7 @@ switch(command){
             }
         // if not, create the user
         } else {
-            with(instance_create(target_x, target_y, obj_User)){
+            with(instance_create(target_x, target_y, obj_user)){
                 username = other.username
             }
         }

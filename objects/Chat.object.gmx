@@ -165,13 +165,13 @@ allowed_character = keyboard_key != vk_shift &amp;&amp; keyboard_key != vk_lshif
 if(keyboard_key == vk_enter){
     if(typing){
         if(text != ""){
-            text = obj_Player.username+": "+text
+            text = obj_player.username+": "+text
             var length = string_length(text)
             for(var i = 0; i &lt; length; i+=1){
                 show_debug_message("Index "+string(i)+":"+string_char_at(text, i))
             }
             // "/" initiates a command
-            if(string_char_at(text, string_length(obj_Player.username)+3) == "/"){
+            if(string_char_at(text, string_length(obj_player.username)+3) == "/"){
                 var command = string_delete(text, 1, string_pos("/", text))
                 var value = string_delete(command, 1, string_pos(" ", command))
                 command = string_replace(command, " "+value, "")

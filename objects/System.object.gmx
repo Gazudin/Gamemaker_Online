@@ -154,8 +154,8 @@ draw_set_halign(fa_left)
 scr_draw_border_text(10, 30, "Ping: "+string(Network.ping)+"ms", c_white, c_black, 2, 1.0)
 
 // pussycounter
-if(instance_exists(obj_Player)){
-    scr_draw_border_text(10, 10, "rekt pussies: " + string(obj_Player.rekt_pussies), c_white, c_black, 2, 1.0)
+if(instance_exists(obj_player)){
+    scr_draw_border_text(10, 10, "rekt pussies: " + string(obj_player.rekt_pussies), c_white, c_black, 2, 1.0)
 }
 </string>
           </argument>
@@ -197,7 +197,7 @@ switch(keyboard_key){
             with(Chat){
                 instance_destroy();
             }
-            with(obj_Player){
+            with(obj_player){
                 instance_destroy();
             }
             

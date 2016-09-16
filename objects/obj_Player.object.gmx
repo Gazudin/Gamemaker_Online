@@ -156,6 +156,105 @@ if(obj_player_stats.hp &lt;= 0){
         </arguments>
       </action>
     </event>
+    <event eventtype="4" ename="obj_health">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// Collect health
+with(other){
+  instance_destroy(); 
+}
+
+with(obj_player_stats){
+  hp = min(hp+5, maxhp);
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="4" ename="obj_door">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// Go through the door
+
+if(room_exists(other.new_room)){
+  room_goto(other.new_room);
+  x = other.new_x;
+  y = other.new_y;
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="4" ename="obj_expr">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// Collect expr
+with(other){
+  instance_destroy(); 
+}
+
+with(obj_player_stats){
+  expr += 1;
+  if(expr &gt;= maxexpr){
+    level += 1;
+    expr = expr-maxexpr;
+    maxexpr += 3;
+    hp += 2;
+    maxhp += 2;
+    stamina += 2;
+    maxstamina += 2;
+    attack += 1;
+  }
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
     <event eventtype="7" enumb="7">
       <action>
         <libid>1</libid>
@@ -183,6 +282,38 @@ if(state == scr_attack_state){
         </arguments>
       </action>
     </event>
+    <event eventtype="7" enumb="5">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// Send leave room packet
+
+// Make sure we're not in login screen
+if(room != rm_login){
+  var packet = buffer_create(1, buffer_grow, 1);
+  buffer_write(packet, buffer_string, "leave room");
+  buffer_write(packet, buffer_string, room_get_name(room));
+  
+  scr_network_write(Network.TCP_socket, packet, "tcp");
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
     <event eventtype="7" enumb="4">
       <action>
         <libid>1</libid>
@@ -200,16 +331,21 @@ if(state == scr_attack_state){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/// update the room
+            <string>/// Update the room: send enter room packet
 event_inherited();
 
-var packet = buffer_create(1, buffer_grow, 1);
-buffer_write(packet, buffer_string, "enter");
-buffer_write(packet, buffer_u32, x);
-buffer_write(packet, buffer_u32, y);
+// make sure we're logged in when sending room data
+if(room != rm_login){
+  var packet = buffer_create(1, buffer_grow, 1);
+  buffer_write(packet, buffer_string, "enter room");
+  buffer_write(packet, buffer_string, room_get_name(room) );
+  buffer_write(packet, buffer_u32, x);
+  buffer_write(packet, buffer_u32, y);
+  
+  scr_network_write(Network.TCP_socket, packet, "tcp");
+  //scr_network_write(Network.UDP_socket, packet, "udp");
+}
 
-scr_network_write(Network.TCP_socket, packet, "tcp");
-//scr_network_write(Network.UDP_socket, packet, "udp");
 
 if(!instance_exists(obj_turtle)){
     instance_create(x, y, obj_turtle)

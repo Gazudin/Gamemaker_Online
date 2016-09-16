@@ -5,9 +5,11 @@ old_y = phy_position_y;
 // Get input
 scr_get_input();
 
-if(dash_key){
+if(dash_key and obj_player_stats.stamina >= 5){
   state = scr_dash_state;
   alarm[0] = room_speed/6;
+  obj_player_stats.stamina -= 5;
+  obj_player_stats.alarm[0] = room_speed;
 }
 
 if(attack_key){

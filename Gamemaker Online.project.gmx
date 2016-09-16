@@ -29,6 +29,9 @@
     <sprite>sprites\spr_player_shadow</sprite>
     <sprite>sprites\spr_enemy_slime</sprite>
     <sprite>sprites\spr_damage</sprite>
+    <sprite>sprites\spr_expr</sprite>
+    <sprite>sprites\spr_health</sprite>
+    <sprite>sprites\spr_door</sprite>
   </sprites>
   <backgrounds name="background">
     <background>background\bg_connecting</background>
@@ -45,6 +48,7 @@
       <script>scripts\scr_get_input.gml</script>
       <script>scripts\scr_draw_border_text.gml</script>
       <script>scripts\scr_get_face.gml</script>
+      <script>scripts\scr_chance.gml</script>
     </scripts>
     <scripts name="Player states">
       <script>scripts\scr_move_state.gml</script>
@@ -104,12 +108,16 @@
     <object>objects\obj_wall</object>
     <object>objects\obj_enemy_slime</object>
     <object>objects\obj_damage</object>
+    <object>objects\obj_expr</object>
+    <object>objects\obj_health</object>
+    <object>objects\obj_door</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_init</room>
     <room>rooms\rm_login</room>
     <rooms name="Maps">
       <room>rooms\rm_starting_zone</room>
+      <room>rooms\rm_test</room>
     </rooms>
   </rooms>
   <help>

@@ -199,17 +199,48 @@ switch(command){
     sprite = buffer_read(argument0, buffer_string);
     with(obj_user){
       if(username == other.username){
-        show_debug_message('Found user: '+username);
         sprite_index = asset_get_index(other.sprite);
       }
     }
     break;
-      
-  case "DASH":
   
+  case "DASH":
+    username = buffer_read(argument0, buffer_string);
+    with(obj_user){
+      if(username == other.username){
+        dashing = true;
+        alarm[0] = room_speed/7;
+      }
+    }
     break;
       
   case "ATTACK":
+    username = buffer_read(argument0, buffer_string);
+    face = buffer_read(argument0, buffer_u16);
+    with(obj_user){
+      if(username == other.username){
+        switch(other.face){
+          case RIGHT:
+            sprite_index = spr_player_attack_right;
+            break;
+            
+          case UP:
+            sprite_index = spr_player_attack_up;
+            break;
+            
+          case LEFT:
+            sprite_index = spr_player_attack_left;
+            break;
+            
+          case DOWN:
+            sprite_index = spr_player_attack_down;
+            break;
+        }
+        image_index = 0;
+        image_speed = .4;
+        attacking = true;
+      }
+    }
     break;
       
   case "PUSSY":

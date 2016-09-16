@@ -10,11 +10,21 @@ if(dash_key and obj_player_stats.stamina >= 5){
   alarm[0] = room_speed/6;
   obj_player_stats.stamina -= 5;
   obj_player_stats.alarm[0] = room_speed;
+  // Send dash packet
+  var packet = buffer_create(1, buffer_grow, 1);
+  buffer_write(packet, buffer_string, "dash");
+  scr_network_write(Network.TCP_socket, packet, "tcp");
 }
 
 if(attack_key){
   image_index = 0;
   state = scr_attack_state;
+  // Send attack packet
+  var packet = buffer_create(1, buffer_grow, 1);
+  buffer_write(packet, buffer_string, "attack");
+  buffer_write(packet, buffer_u32, face);
+  show_debug_message("Face: "+string(face));
+  scr_network_write(Network.TCP_socket, packet, "tcp");
 }
 
 // Get direction
@@ -75,28 +85,34 @@ if(new_sprite != sprite_index){
 
 // if moved, update position
 if(old_x != phy_position_x || old_y != phy_position_y){  
+  // Not idle any more when moving
+  idle = false;
 
-   /*var packet = buffer_create(1, buffer_grow, 1);
-    buffer_write(packet, buffer_string, "pos");
-    buffer_write(packet, buffer_string, room_get_name(room));
-    buffer_write(packet, buffer_u32, x);
-    buffer_write(packet, buffer_u32, y);
-    pos_id += 1
-    
-    scr_network_write(Network.UDP_socket, packet, "udp");
-    */
-    
-    var packet = buffer_create(1, buffer_grow, 1);
-    buffer_write(packet, buffer_string, "pos");
-    buffer_write(packet, buffer_u32, x);
-    buffer_write(packet, buffer_u32, y);
-    scr_network_write(Network.TCP_socket, packet, "tcp");
+ /*var packet = buffer_create(1, buffer_grow, 1);
+  buffer_write(packet, buffer_string, "pos");
+  buffer_write(packet, buffer_string, room_get_name(room));
+  buffer_write(packet, buffer_u32, x);
+  buffer_write(packet, buffer_u32, y);
+  pos_id += 1
+  
+  scr_network_write(Network.UDP_socket, packet, "udp");
+  */
+  
+  var packet = buffer_create(1, buffer_grow, 1);
+  buffer_write(packet, buffer_string, "pos");
+  buffer_write(packet, buffer_u32, x);
+  buffer_write(packet, buffer_u32, y);
+  scr_network_write(Network.TCP_socket, packet, "tcp");
 } else {
   image_speed = 0;
   image_index = 0;
   
-  // Send idle packet
-  var packet = buffer_create(1, buffer_grow, 1);
-  buffer_write(packet, buffer_string, "idle");
-  scr_network_write(Network.TCP_socket, packet, "tcp");
+  // If no already in idle
+  if(!idle){
+    // Send idle packet
+    var packet = buffer_create(1, buffer_grow, 1);
+    buffer_write(packet, buffer_string, "idle");
+    scr_network_write(Network.TCP_socket, packet, "tcp");
+    idle = true;
+  }
 }

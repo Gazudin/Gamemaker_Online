@@ -17,7 +17,7 @@ with(instance_create(x, y, obj_dash_effect)){
   sprite_index = other.sprite_index;
   image_index = other.image_index;
 }
- 
+
 
 /*
 var packet = buffer_create(1, buffer_grow, 1);
@@ -34,6 +34,5 @@ var packet = buffer_create(1, buffer_grow, 1);
 buffer_write(packet, buffer_string, "pos");
 buffer_write(packet, buffer_u32, x);
 buffer_write(packet, buffer_u32, y);
-
 scr_network_write(Network.TCP_socket, packet, "tcp");
 

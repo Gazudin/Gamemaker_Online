@@ -41,6 +41,7 @@ scr_get_input();
 state = scr_move_state;
 face = RIGHT;
 
+idle = false;
 old_x = x;
 old_y = y;
 username_x_offset = 0;

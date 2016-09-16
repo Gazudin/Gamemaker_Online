@@ -44,7 +44,6 @@ if(image_index >= 3 and !attacked){
       break;
   } 
 
-
   with(instance_create(xx, yy, obj_damage)){
     creator = other.id;
     damage = obj_player_stats.attack;

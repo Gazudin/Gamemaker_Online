@@ -25,14 +25,41 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/// initialize
+            <string>/// Initialize other user
 image_speed = 0;
 username_x_offset = 0;
 username_y_offset = -sprite_height/2;
-
 target_x = x;
 target_y = y;
+face = DOWN;
 
+dashing = false;
+attacking = false;
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="2" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// Dash effect alarm
+dashing = false;
 </string>
           </argument>
         </arguments>
@@ -58,14 +85,52 @@ target_y = y;
             <string>/// Depth correction
 depth = -y;
 
+// Create dash effect
+if(dashing){
+  with(instance_create(x, y, obj_dash_effect)){
+    sprite_index = other.sprite_index;
+    image_index = other.image_index;
+  }
+}
+
 // Move
-if(target_x != round(x) or target_y != round(y)){
-  phy_position_x = target_x;
-  phy_position_y = target_y;
-  image_speed = .1;
+if(!attacking){
+  if(target_x != round(x) or target_y != round(y)){
+    phy_position_x = target_x;
+    phy_position_y = target_y;
+    image_speed = .1;
+  }
 }
 
 
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="7" enumb="7">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// End attacking
+if(attacking){
+  attacking = false;
+  sprite_index = spr_player_down;
+  image_speed = 0;
+}
 </string>
           </argument>
         </arguments>

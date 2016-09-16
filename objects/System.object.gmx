@@ -80,6 +80,22 @@ if(!audio_is_playing(bgm)){
             <kind>1</kind>
             <string>/// notify server
 
+// If still logged in
+if(room != rm_login){
+  // send logout event with stats
+  var packet = buffer_create(1, buffer_grow, 1);
+  buffer_write(packet, buffer_string, "logout");
+  buffer_write(packet, buffer_u32, obj_player_stats.level);
+  buffer_write(packet, buffer_u32, obj_player_stats.expr);
+  buffer_write(packet, buffer_u32, obj_player_stats.maxexpr);
+  buffer_write(packet, buffer_u32, obj_player_stats.hp);
+  buffer_write(packet, buffer_u32, obj_player_stats.maxhp);
+  buffer_write(packet, buffer_u32, obj_player_stats.stamina);
+  buffer_write(packet, buffer_u32, obj_player_stats.maxstamina);
+  buffer_write(packet, buffer_u32, obj_player_stats.attack);
+  scr_network_write(Network.TCP_socket, packet, "tcp");
+}
+
 // send game end packet
 var packet = buffer_create(1, buffer_grow, 1)
 buffer_write(packet, buffer_string, "end")
@@ -189,10 +205,17 @@ switch(keyboard_key){
             // send game end packet
             game_end();
         } else {
-            // send logout event
+            // send logout event with stats
             var packet = buffer_create(1, buffer_grow, 1);
             buffer_write(packet, buffer_string, "logout");
-            //scr_network_write(Network.UDP_socket, packet, "udp");
+            buffer_write(packet, buffer_u32, obj_player_stats.level);
+            buffer_write(packet, buffer_u32, obj_player_stats.expr);
+            buffer_write(packet, buffer_u32, obj_player_stats.maxexpr);
+            buffer_write(packet, buffer_u32, obj_player_stats.hp);
+            buffer_write(packet, buffer_u32, obj_player_stats.maxhp);
+            buffer_write(packet, buffer_u32, obj_player_stats.stamina);
+            buffer_write(packet, buffer_u32, obj_player_stats.maxstamina);
+            buffer_write(packet, buffer_u32, obj_player_stats.attack);
             scr_network_write(Network.TCP_socket, packet, "tcp");
             with(Chat){
                 instance_destroy();

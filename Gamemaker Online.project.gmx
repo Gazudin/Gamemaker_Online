@@ -32,6 +32,8 @@
     <sprite>sprites\spr_expr</sprite>
     <sprite>sprites\spr_health</sprite>
     <sprite>sprites\spr_door</sprite>
+    <sprite>sprites\spr_sign</sprite>
+    <sprite>sprites\spr_dialog_box</sprite>
   </sprites>
   <backgrounds name="background">
     <background>background\bg_connecting</background>

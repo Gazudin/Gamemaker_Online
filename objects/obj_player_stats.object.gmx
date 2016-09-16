@@ -118,9 +118,9 @@ draw_set_valign(fa_top);
 draw_set_font(fnt_HUD);
 
 // Draw HUD
-scr_draw_border_text(10, 60, "hp: "+string(hp)+"/"+string(maxhp), c_white, c_black, 1, 1.0);
-scr_draw_border_text(10, 76, "stamina: "+string(stamina)+"/"+string(maxstamina), c_white, c_black, 1, 1.0);
-scr_draw_border_text(10, 92, "level: "+string(level), c_white, c_black, 1, 1.0);
+scr_draw_border_text(10, 60, "level: "+string(level), c_white, c_black, 1, 1.0);
+scr_draw_border_text(10, 76, "hp: "+string(hp)+"/"+string(maxhp), c_white, c_black, 1, 1.0);
+scr_draw_border_text(10, 92, "stamina: "+string(stamina)+"/"+string(maxstamina), c_white, c_black, 1, 1.0);
 scr_draw_border_text(10, 108, "attack: "+string(attack), c_white, c_black, 1, 1.0);
 scr_draw_border_text(10, 124, "exp: "+string(expr)+"/"+string(maxexpr), c_white, c_black, 1, 1.0);
 </string>

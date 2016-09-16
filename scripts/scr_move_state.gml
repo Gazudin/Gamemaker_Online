@@ -44,22 +44,32 @@ if(len == 0){
 }
 
 // Control the sprite
+var new_sprite = sprite_index;
 switch(face){
   case RIGHT:
-    sprite_index = spr_player_right;
+    new_sprite = spr_player_right;
     break;
     
   case UP:
-    sprite_index = spr_player_up;
+    new_sprite = spr_player_up;
     break;
     
   case LEFT:
-    sprite_index = spr_player_left;
+    new_sprite = spr_player_left;
     break;
     
   case DOWN:
-    sprite_index = spr_player_down;
+    new_sprite = spr_player_down;
     break;
+}
+// When changing sprite
+if(new_sprite != sprite_index){
+  sprite_index = new_sprite;
+  // Send sprite packet
+  var packet = buffer_create(1, buffer_grow, 1);
+  buffer_write(packet, buffer_string, "sprite");
+  buffer_write(packet, buffer_string, sprite_get_name(new_sprite));
+  scr_network_write(Network.TCP_socket, packet, "tcp");
 }
 
 
@@ -80,9 +90,13 @@ if(old_x != phy_position_x || old_y != phy_position_y){
     buffer_write(packet, buffer_string, "pos");
     buffer_write(packet, buffer_u32, x);
     buffer_write(packet, buffer_u32, y);
-    
     scr_network_write(Network.TCP_socket, packet, "tcp");
 } else {
   image_speed = 0;
   image_index = 0;
+  
+  // Send idle packet
+  var packet = buffer_create(1, buffer_grow, 1);
+  buffer_write(packet, buffer_string, "idle");
+  scr_network_write(Network.TCP_socket, packet, "tcp");
 }

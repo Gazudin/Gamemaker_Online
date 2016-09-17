@@ -7,6 +7,10 @@
   <sounds name="sound">
     <sound>sound\bgm_ragnarok</sound>
     <sound>sound\bgm_wild_arms_overworld</sound>
+    <sound>sound\snd_expr</sound>
+    <sound>sound\snd_player_takes_damage</sound>
+    <sound>sound\snd_sword_attack</sound>
+    <sound>sound\snd_enemy_die</sound>
   </sounds>
   <sprites name="sprites">
     <sprites name="UI Framework">
@@ -14,25 +18,74 @@
     </sprites>
     <sprites name="Players">
       <sprite>sprites\spr_player</sprite>
+      <sprite>sprites\spr_player_right</sprite>
+      <sprite>sprites\spr_player_down</sprite>
+      <sprite>sprites\spr_player_left</sprite>
+      <sprite>sprites\spr_player_up</sprite>
+      <sprite>sprites\spr_player_attack_down</sprite>
+      <sprite>sprites\spr_player_attack_right</sprite>
+      <sprite>sprites\spr_player_attack_left</sprite>
+      <sprite>sprites\spr_player_attack_up</sprite>
     </sprites>
     <sprite>sprites\spr_pussy</sprite>
     <sprite>sprites\spr_turtle</sprite>
+    <sprite>sprites\spr_wall</sprite>
+    <sprite>sprites\spr_player_shadow</sprite>
+    <sprite>sprites\spr_enemy_slime</sprite>
+    <sprite>sprites\spr_damage</sprite>
+    <sprite>sprites\spr_expr</sprite>
+    <sprite>sprites\spr_health</sprite>
+    <sprite>sprites\spr_door</sprite>
+    <sprite>sprites\spr_sign</sprite>
+    <sprite>sprites\spr_dialog_box</sprite>
+    <sprite>sprites\spr_projectile</sprite>
+    <sprite>sprites\spr_chinlin_run_up</sprite>
+    <sprite>sprites\spr_chinlin_stand_down</sprite>
+    <sprite>sprites\spr_chinlin_stand_right</sprite>
+    <sprite>sprites\spr_chinlin_stand_up</sprite>
+    <sprite>sprites\spr_chinlin_run_down</sprite>
+    <sprite>sprites\spr_chinlin_run_right</sprite>
   </sprites>
   <backgrounds name="background">
     <background>background\bg_connecting</background>
     <background>background\bg_Title</background>
+    <background>background\bg_grass</background>
   </backgrounds>
   <paths name="paths"/>
   <scripts name="scripts">
-    <script>scripts\scr_draw_border_text.gml</script>
     <scripts name="Network">
       <script>scripts\scr_network_write.gml</script>
       <script>scripts\scr_handle_packet.gml</script>
     </scripts>
+    <scripts name="Helper scripts">
+      <script>scripts\scr_get_input.gml</script>
+      <script>scripts\scr_draw_border_text.gml</script>
+      <script>scripts\scr_get_face.gml</script>
+      <script>scripts\scr_chance.gml</script>
+      <script>scripts\scr_string_copy_words.gml</script>
+    </scripts>
+    <scripts name="Player states">
+      <script>scripts\scr_move_state.gml</script>
+      <script>scripts\scr_dash_state.gml</script>
+      <script>scripts\scr_attack_state.gml</script>
+    </scripts>
+    <scripts name="Enemy states">
+      <scripts name="Enemy helper scripts">
+        <script>scripts\scr_enemy_choose_next_state.gml</script>
+        <script>scripts\scr_check_for_player.gml</script>
+        <script>scripts\scr_move_axis.gml</script>
+      </scripts>
+      <script>scripts\scr_enemy_idle_state.gml</script>
+      <script>scripts\scr_enemy_wander_state.gml</script>
+      <script>scripts\scr_enemy_chase_state.gml</script>
+      <script>scripts\scr_enemy_stall_state.gml</script>
+    </scripts>
+    <script>scripts\scr_animation_hit_frame.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fnt_login</font>
     <font>fonts\fnt_chat</font>
+    <font>fonts\fnt_dialog</font>
     <font>fonts\fnt_HUD</font>
     <font>fonts\fnt_debug</font>
     <font>fonts\fnt_user_name</font>
@@ -40,7 +93,9 @@
   <objects name="objects">
     <objects name="System">
       <object>objects\System</object>
+      <object>objects\Input</object>
       <object>objects\Chat</object>
+      <object>objects\View</object>
     </objects>
     <objects name="Sockets">
       <object>objects\Network</object>
@@ -50,27 +105,41 @@
       <object>objects\ui_focus_base</object>
       <object>objects\ui_textbox_base</object>
       <object>objects\ui_button_base</object>
-    </objects>
-    <objects name="Room Specific">
-      <objects name="Login">
-        <object>objects\obj_txt_Username</object>
-        <object>objects\obj_txt_Password</object>
-        <object>objects\obj_btn_Login</object>
-        <object>objects\obj_btn_Register</object>
+      <objects name="Room Specific">
+        <objects name="Login">
+          <object>objects\obj_txt_Username</object>
+          <object>objects\obj_txt_Password</object>
+          <object>objects\obj_btn_Login</object>
+          <object>objects\obj_btn_Register</object>
+        </objects>
       </objects>
     </objects>
-    <objects name="Players">
+    <objects name="Player">
       <object>objects\obj_player</object>
-      <object>objects\obj_User</object>
+      <object>objects\obj_user</object>
+      <object>objects\obj_player_stats</object>
+      <object>objects\obj_dash_effect</object>
     </objects>
+    <object>objects\obj_lifeform_parent</object>
     <object>objects\obj_pussy</object>
     <object>objects\obj_turtle</object>
+    <object>objects\obj_wall</object>
+    <object>objects\obj_enemy_slime</object>
+    <object>objects\obj_enemy_chinlin</object>
+    <object>objects\obj_damage</object>
+    <object>objects\obj_expr</object>
+    <object>objects\obj_health</object>
+    <object>objects\obj_door</object>
+    <object>objects\obj_speaker</object>
+    <object>objects\obj_dialog</object>
+    <object>objects\obj_sign</object>
+    <object>objects\obj_projectile</object>
   </objects>
   <rooms name="rooms">
-    <room>rooms\rm_init</room>
     <room>rooms\rm_login</room>
     <rooms name="Maps">
       <room>rooms\rm_starting_zone</room>
+      <room>rooms\rm_test</room>
     </rooms>
   </rooms>
   <help>

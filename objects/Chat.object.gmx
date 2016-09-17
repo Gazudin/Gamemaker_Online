@@ -93,48 +93,52 @@ draw_set_halign(fa_left)
 
 switch(room_get_name(room)){
     
-    case "rm_login":
-        break
-        
-    case "rm_starting_zone":
-        // draw chat log box
-        draw_set_colour(c_green);
-        draw_rectangle(0, 
-            display_get_gui_height()-chat_log_height-chat_input_height,
-            chat_log_width, 
-            display_get_gui_height()-chat_input_height, 
-            false);
-        // draw chat input box
-        draw_set_colour(c_black);
-        draw_rectangle(0, 
-            display_get_gui_height()-chat_input_height, 
-            chat_input_width, 
-            display_get_gui_height(), 
-            false);
-        
-        // draw text
-        draw_set_valign(fa_center)
-        draw_set_color(c_aqua)
-        draw_text(1, (display_get_gui_height()-chat_input_height/2), text)
-        // draw
-        chat_size = ds_list_size(chat_log)
-        for(var i = chat_size-1; i &gt;= max(0, chat_size-chat_log_lines); i -= 1){
-            var chat_str = ds_list_find_value(chat_log, i)
-            show_debug_message("System in chat_str: " + string(string_pos("System:", chat_str)))
-            if(string_pos("System:", chat_str) == 1){
-                draw_set_color(c_yellow)
-            }else{
-                draw_set_color(c_aqua)
-            }
-            draw_text(1, (display_get_gui_height()-chat_input_height/2)-((chat_size-i)*chat_input_height),
-                chat_str)
-        }
-        break
+  case "rm_login":
+    // Don't draw in login screen
+    break;
+      
+  default:
+    // Set transparency
+    draw_set_alpha(.5);
+    // Draw chat log box
+    draw_set_colour(c_green);
+    draw_rectangle(0, 
+      display_get_gui_height()-chat_log_height-chat_input_height,
+      chat_log_width, 
+      display_get_gui_height()-chat_input_height, 
+      false);
+    // Draw chat input box
+    draw_set_colour(c_black);
+    draw_rectangle(0, 
+      display_get_gui_height()-chat_input_height, 
+      chat_input_width, 
+      display_get_gui_height(), 
+      false);
+      
+    // Reset alpha for text
+    draw_set_alpha(1);
+    // Draw text
+    draw_set_valign(fa_center);
+    draw_set_color(c_aqua);
+    draw_text(1, (display_get_gui_height()-chat_input_height/2), text);
+    // draw
+    chat_size = ds_list_size(chat_log);
+    for(var i = chat_size-1; i &gt;= max(0, chat_size-chat_log_lines); i -= 1){
+      var chat_str = ds_list_find_value(chat_log, i);
+      if(string_pos("System:", chat_str) == 1){
+        draw_set_color(c_yellow);
+      }else{
+        draw_set_color(c_aqua);
+      }
+        draw_text(1, (display_get_gui_height()-chat_input_height/2)-((chat_size-i)*chat_input_height),
+            chat_str);
+      }
+    break;
 }
 
 // reset text
-draw_set_halign(fa_left)
-draw_set_valign(fa_top)
+draw_set_halign(fa_left);
+draw_set_valign(fa_top);
 </string>
           </argument>
         </arguments>
@@ -157,57 +161,66 @@ draw_set_valign(fa_top)
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/// typing
+            <string>/// Typing
 
+// Exclude characters from typing
 allowed_character = keyboard_key != vk_shift &amp;&amp; keyboard_key != vk_lshift &amp;&amp; 
-   keyboard_key != vk_rshift &amp;&amp; keyboard_key != vk_tab
-   
-if(keyboard_key == vk_enter){
-    if(typing){
-        if(text != ""){
-            text = obj_player.username+": "+text
-            var length = string_length(text)
-            for(var i = 0; i &lt; length; i+=1){
-                show_debug_message("Index "+string(i)+":"+string_char_at(text, i))
+   keyboard_key != vk_rshift &amp;&amp; keyboard_key != vk_tab &amp;&amp; keyboard_key != vk_control &amp;&amp;
+   keyboard_key != vk_alt &amp;&amp; keyboard_key != vk_ralt
+
+// Press enter and not in login screen
+if(keyboard_key == vk_enter &amp;&amp; room != rm_login){
+  if(typing){
+    if(text != ""){
+      text = obj_player.username+": "+text;
+      var length = string_length(text);
+      // "/" initiates a command
+      if(string_char_at(text, string_length(obj_player.username)+3) == "/"){
+        var command = string_delete(text, 1, string_pos("/", text));
+        var value = string_delete(command, 1, string_pos(" ", command));
+        command = string_replace(command, " "+value, "")
+        if(command == "pet"){
+            if(instance_exists(obj_turtle)){
+                obj_turtle.name = value;
+                text = "System: Changed pet name to "+value+"!";
             }
-            // "/" initiates a command
-            if(string_char_at(text, string_length(obj_player.username)+3) == "/"){
-                var command = string_delete(text, 1, string_pos("/", text))
-                var value = string_delete(command, 1, string_pos(" ", command))
-                command = string_replace(command, " "+value, "")
-                if(command == "pet"){
-                    if(instance_exists(obj_turtle)){
-                        obj_turtle.name = value
-                        text = "System: Changed pet name to "+value+"!"
-                    }
-                }else{
-                    text = 'System: Unknown command "'+command+'"'
-                }
-                ds_list_add(chat_log, text)
-            }else{
-                ds_list_add(chat_log, text)
-                // send chat packet
-                var packet = buffer_create(1, buffer_grow, 1)
-                buffer_write(packet, buffer_string, "chat")
-                buffer_write(packet, buffer_string, text)
-                scr_network_write(Network.TCP_socket, packet, "tcp")
-            }
-            
-            // reset text
-            text = ""
+        }else{
+            text = 'System: Unknown command "'+command+'"';
         }
-        typing = false
-    }else{
-        typing = true
+        ds_list_add(chat_log, text);
+      }else{
+        ds_list_add(chat_log, text);
+        // send chat packet
+        var packet = buffer_create(1, buffer_grow, 1);
+        buffer_write(packet, buffer_string, "chat");
+        buffer_write(packet, buffer_string, text);
+        scr_network_write(Network.TCP_socket, packet, "tcp");
+      }
+      // reset text
+      text = "";
     }
+    typing = false;
+  }else{
+    typing = true;
+    // If not already in idle
+    if(instance_exists(obj_player)){
+      if(!obj_player.idle){
+        // Send idle packet
+        var packet = buffer_create(1, buffer_grow, 1);
+        buffer_write(packet, buffer_string, "idle");
+        scr_network_write(Network.TCP_socket, packet, "tcp");
+        obj_player.idle = true;
+      }
+    }
+  }
 }else{
-    if(typing){
-        if(keyboard_key == vk_backspace){
-            text = string_copy(text, 0, string_length(text)-1)
-        }else if(allowed_character){
-            text += keyboard_lastchar
-        }
+  if(typing){
+    if(keyboard_key == vk_backspace){
+      text = string_copy(text, 0, string_length(text)-1);
+    }else if(allowed_character){
+      text += keyboard_lastchar;
     }
+  }
 }
    
 </string>
@@ -216,7 +229,7 @@ if(keyboard_key == vk_enter){
       </action>
     </event>
   </events>
-  <PhysicsObject>0</PhysicsObject>
+  <PhysicsObject>-1</PhysicsObject>
   <PhysicsObjectSensor>0</PhysicsObjectSensor>
   <PhysicsObjectShape>0</PhysicsObjectShape>
   <PhysicsObjectDensity>0.5</PhysicsObjectDensity>

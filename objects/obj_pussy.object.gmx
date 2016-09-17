@@ -62,7 +62,7 @@ if(distance_to_object(obj_player) &lt;= 5 &amp;&amp; !flag){
     
     obj_player.rekt_pussies += 1
     
-    instance_destroy()
+    instance_destroy();
 }
 
 </string>

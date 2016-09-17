@@ -27,19 +27,15 @@
             <kind>1</kind>
             <string>/// Initialize the player
 event_inherited();
-hp = 10;
 spd = 2;
 hspd = 0;
 vspd = 0;
-xaxis = 0;
-yaxis = 0;
 len= 0;
 dir = 0;
 image_speed = 0;
-attacked = false;
-scr_get_input();
-state = scr_move_state;
 face = RIGHT;
+movement = MOVE;
+state = scr_move_state;
 
 idle = false;
 old_x = x;
@@ -48,12 +44,26 @@ username_x_offset = 0;
 username_y_offset = -sprite_height/2;
 rekt_pussies = 0;
 
+// Create the sprite arrays
+  // Moving
+sprite[MOVE, RIGHT] = spr_player_right;
+sprite[MOVE, UP] = spr_player_up;
+sprite[MOVE, LEFT] = spr_player_left;
+sprite[MOVE, DOWN] = spr_player_down;
+  // Attacking
+sprite[ATTACK, RIGHT] = spr_player_attack_right;
+sprite[ATTACK, UP] = spr_player_attack_up;
+sprite[ATTACK, LEFT] = spr_player_attack_left;
+sprite[ATTACK, DOWN] = spr_player_attack_down;
+
 
 // Create the View
 instance_create(x, y, View);
 
 // Create turdl
-pet = instance_create(x, y, obj_turtle);
+if(!instance_exists(obj_turtle)){
+    pet = instance_create(x, y, obj_turtle)
+}
 </string>
           </argument>
         </arguments>
@@ -136,14 +146,30 @@ state = scr_move_state;
             <kind>1</kind>
             <string>/// Move the player in the step event
 depth = -y;
+new_sprite = sprite[movement, face];
+
+// When changing sprite
+if(new_sprite != sprite_index){
+  sprite_index = new_sprite;
+  // Send sprite packet
+  var packet = buffer_create(1, buffer_grow, 1);
+  buffer_write(packet, buffer_string, "sprite");
+  buffer_write(packet, buffer_string, sprite_get_name(new_sprite));
+  scr_network_write(Network.TCP_socket, packet, "tcp");
+}
 
 // Don't act if typing
 if(!Chat.typing){
-    script_execute(state);
+  script_execute(state);
+} else {
+  image_speed = 0;
+  image_index = 0;
 }
 
 if(obj_player_stats.hp &lt;= 0){
-  instance_destroy();
+  show_message("You died! But Gazu the almighty revived you");
+  obj_player_stats.hp = 1;
+  // instance_destroy();
 }
 
 
@@ -203,7 +229,8 @@ if(room_exists(other.new_room)){
             <kind>1</kind>
             <string>/// Collect health
 with(other){
-  instance_destroy(); 
+  instance_destroy();
+  audio_play_sound(snd_expr, 5, false);
 }
 
 with(obj_player_stats){
@@ -233,7 +260,8 @@ with(obj_player_stats){
             <kind>1</kind>
             <string>/// Collect expr
 with(other){
-  instance_destroy(); 
+  instance_destroy();
+  audio_play_sound(snd_expr, 5, false);
 }
 
 with(obj_player_stats){
@@ -289,7 +317,6 @@ with(obj_player_stats){
             <string>/// Change back to move state
 if(state == scr_attack_state){
   state = scr_move_state;
-  attacked = false;
 }
 </string>
           </argument>
@@ -358,11 +385,6 @@ if(room != rm_login){
   
   scr_network_write(Network.TCP_socket, packet, "tcp");
   //scr_network_write(Network.UDP_socket, packet, "udp");
-}
-
-
-if(!instance_exists(obj_turtle)){
-    instance_create(x, y, obj_turtle)
 }
 
 </string>

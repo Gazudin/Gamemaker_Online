@@ -11,8 +11,8 @@ switch(command){
     server_time = buffer_read(argument0, buffer_string);
     show_debug_message("Server welcomes you @ " + server_time);
     break;
-        
     
+        
   case "PING":
     // update ping
     Network.ping_sent = false;
@@ -20,7 +20,7 @@ switch(command){
     Network.ping = _timer - Network.ping_start;
     Network.ping_start = _timer;
     break;
-        
+    
       
   case "LOGIN":
     status = buffer_read(argument0, buffer_string);
@@ -57,6 +57,7 @@ switch(command){
         audio_stop_sound(System.bgm);
         System.bgm = bgm_wild_arms_overworld;
         audio_play_sound(System.bgm, 5, true);
+        audio_sound_gain(System.bgm, .4, 0);
         // Initiate a player object on this room
         with(instance_create(target_x, target_y, obj_player)){
             username = other.username;
@@ -168,12 +169,12 @@ switch(command){
         target_y = other.target_y;
       }
     // if not, create the user
-    } else {
+    } /*else {
       with(instance_create(target_x, target_y, obj_user)){
         username = other.username;
       }
-    }
-    break
+    }*/
+    break;
       
   // User stopped moving
   case "IDLE":
@@ -189,7 +190,6 @@ switch(command){
   case "CHAT":
     message = buffer_read(argument0, buffer_string);
     if(instance_exists(Chat)){
-      show_message("receivec message");
       ds_list_add(Chat.chat_log, message);
     }
     break;

@@ -26,30 +26,28 @@
           <argument>
             <kind>1</kind>
             <string>/// Initiate the connetion
-randomize() // for random_udp_port
+randomize(); // for random_udp_port
 // Instance variables
-savedBuffer = buffer_create(1, buffer_grow, 1)
-reading = 0
+savedBuffer = buffer_create(1, buffer_grow, 1);
+reading = 0;
 cutBuffer = buffer_create(1, buffer_grow, 1);
-server_status = "offline" // assume server is offline
-timer_start = get_timer()/1000 // milliseconds
-timer = timer_start
-ping_start = 0
-ping = 0
-ping_frequency = 1500// milliseconds between 2 pings
-ping_sent = false
-timeout = 3500 // milliseconds before connection timeout
-ip = "95.143.172.196"
-tcp_port = 61027
-udp_port = 61954
+server_status = "offline"; // assume server is offline
+timer_start = get_timer()/1000; // milliseconds
+timer = timer_start;
+ping_start = 0;
+ping = 0;
+ping_frequency = 1500;// milliseconds between 2 pings
+ping_sent = false;
+timeout = 3500; // milliseconds before connection timeout
+ip = "95.143.172.196";
+tcp_port = 61027;
+udp_port = 61954;
 
 // configure
-network_set_config(network_config_use_non_blocking_socket, 1) // don't block on connection
+network_set_config(network_config_use_non_blocking_socket, 1); // don't block on connection
 
 // start sending packets
-event_user(0)
-
-room_goto_next()
+event_user(0);
 </string>
           </argument>
         </arguments>

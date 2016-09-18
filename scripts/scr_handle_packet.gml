@@ -79,15 +79,16 @@ switch(command){
             instance_create(0,0,Chat);
         }
         break;
-        // deny login
-        case "FALSE":
-          show_message("Login Failed: User doesn't exist or password incorrect");
-          break;
-            
-        // user already logged in
-        case "INGAME":
-          show_message("Login Failed: User is already logged in!");
-          break;
+        
+      // deny login
+      case "FALSE":
+        show_message("Login Failed: User doesn't exist or password incorrect");
+        break;
+          
+      // user already logged in
+      case "INGAME":
+        show_message("Login Failed: User is already logged in!");
+        break;
   }
   break;
     
@@ -168,20 +169,24 @@ switch(command){
         target_x = other.target_x;
         target_y = other.target_y;
       }
-    // if not, create the user
-    } /*else {
-      with(instance_create(target_x, target_y, obj_user)){
-        username = other.username;
-      }
-    }*/
+    }
     break;
     
   case "SPAWN ENEMY":
-    enemy = buffer_read(argument0, buffer_string);
-    pos_x = buffer_read(argument0, buffer_u16);
-    pos_y = buffer_read(argument0, buffer_u16);
+    ID = buffer_read(argument0, buffer_string);
+    asset = buffer_read(argument0, buffer_string);
+    spawn_x = buffer_read(argument0, buffer_u16);
+    spawn_y = buffer_read(argument0, buffer_u16);
+    maxhp = buffer_read(argument0, buffer_u16);
+    expr = buffer_read(argument0, buffer_u16);
     
-    instance_create(pos_x, pos_y, asset_get_index(enemy));
+    // Create the enemy
+    with(instance_create(spawn_x, spawn_y, asset_get_index(asset))){
+      ID = other.ID;
+      hp = other.maxhp;
+      maxhp = hp;
+      expr = other.expr;
+    };
     break;
       
   // User stopped moving
@@ -247,6 +252,55 @@ switch(command){
         image_index = 0;
         image_speed = .4;
         attacking = true;
+      }
+    }
+    break;
+    
+    
+  case "DAMAGE ENEMY":
+    ID = buffer_read(argument0, buffer_string);
+    damage = buffer_read(argument0, buffer_u16);
+    xforce = buffer_read(argument0, buffer_s16)/1000;
+    yforce = buffer_read(argument0, buffer_s16)/1000;
+    
+    foundEnemy = -1;
+    
+    // Check if that enemy exists
+    with(obj_enemy_parent){
+      if(ID == other.ID){
+        other.foundEnemy = id;
+        break;
+      }
+    }
+    // did we find that enemy
+    if(foundEnemy != -1){
+      // then damage enemy
+      with(foundEnemy){
+        show_debug_message("xforce: "+string(other.xforce));
+        show_debug_message("yforce: "+string(other.yforce));
+        hp -= other.damage;
+        physics_apply_impulse(x, y, other.xforce, other.yforce);
+      }
+    }
+    break;  
+    
+  case "KILL ENEMY":
+    ID = buffer_read(argument0, buffer_string);
+    
+    foundEnemy = -1;
+    
+    // Check if that enemy exists
+    with(obj_enemy_parent){
+      if(ID == other.ID){
+        other.foundEnemy = id;
+        break;
+      }
+    }
+    // did we find that enemy
+    if(foundEnemy != -1){
+      // then kill enemy
+      with(foundEnemy){
+        instance_destroy();
       }
     }
     break;

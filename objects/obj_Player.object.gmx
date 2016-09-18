@@ -259,13 +259,11 @@ with(obj_player_stats){
           <argument>
             <kind>1</kind>
             <string>/// Collect expr
-with(other){
-  instance_destroy();
-  audio_play_sound(snd_expr, 5, false);
-}
+
+var plusexpr = other.plusexpr
 
 with(obj_player_stats){
-  expr += 1;
+  expr += plusexpr;
   // Level up
   if(expr &gt;= maxexpr){
     level += 1;
@@ -290,7 +288,11 @@ with(obj_player_stats){
     buffer_write(packet, buffer_u32, attack);
     scr_network_write(Network.TCP_socket, packet, "tcp");
   }
-  
+}
+
+with(other){
+  instance_destroy();
+  audio_play_sound(snd_expr, 5, false);
 }
 </string>
           </argument>

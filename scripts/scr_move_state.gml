@@ -44,7 +44,6 @@ if(Input.attack_key){
   var packet = buffer_create(1, buffer_grow, 1);
   buffer_write(packet, buffer_string, "attack");
   buffer_write(packet, buffer_u32, face); // Direction to attack
-  show_debug_message("Face: "+string(face));
   scr_network_write(Network.TCP_socket, packet, "tcp");
 }
 

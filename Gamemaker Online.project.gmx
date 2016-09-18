@@ -120,12 +120,15 @@
       <object>objects\obj_player_stats</object>
       <object>objects\obj_dash_effect</object>
     </objects>
+    <objects name="Enemies">
+      <object>objects\obj_enemy_parent</object>
+      <object>objects\obj_enemy_slime</object>
+      <object>objects\obj_enemy_chinlin</object>
+    </objects>
     <object>objects\obj_lifeform_parent</object>
     <object>objects\obj_pussy</object>
     <object>objects\obj_turtle</object>
     <object>objects\obj_wall</object>
-    <object>objects\obj_enemy_slime</object>
-    <object>objects\obj_enemy_chinlin</object>
     <object>objects\obj_damage</object>
     <object>objects\obj_expr</object>
     <object>objects\obj_health</object>

@@ -51,9 +51,8 @@
     <view visible="0" objName="&lt;undefined&gt;" xview="0" yview="0" wview="1024" hview="768" xport="0" yport="0" wport="1024" hport="768" hborder="32" vborder="32" hspeed="-1" vspeed="-1"/>
   </views>
   <instances>
-    <instance objName="obj_wall" x="0" y="0" name="inst_9001D196" locked="0" code="" scaleX="1" scaleY="8.25806427001953" colour="4294967295" rotation="0"/>
-    <instance objName="obj_wall" x="0" y="224" name="inst_CD985FF1" locked="0" code="" scaleX="15" scaleY="2" colour="4294967295" rotation="0"/>
-    <instance objName="obj_wall" x="448" y="0" name="inst_2D6456FE" locked="0" code="" scaleX="1" scaleY="8" colour="4294967295" rotation="0"/>
+    <instance objName="obj_wall" x="0" y="240" name="inst_CD985FF1" locked="0" code="" scaleX="14.9677419662476" scaleY="1.03225803375244" colour="4294967295" rotation="0"/>
+    <instance objName="obj_wall" x="448" y="0" name="inst_2D6456FE" locked="0" code="" scaleX="1" scaleY="8.5" colour="4294967295" rotation="0"/>
     <instance objName="obj_wall" x="96" y="0" name="inst_CE9F6939" locked="0" code="" scaleX="12" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_enemy_slime" x="384" y="112" name="inst_0256368C" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_enemy_slime" x="432" y="160" name="inst_DCAFD880" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
@@ -86,6 +85,7 @@
     <instance objName="obj_enemy_slime" x="272" y="176" name="inst_C0C1CF77" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_enemy_slime" x="272" y="208" name="inst_A3F0DA4B" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_enemy_slime" x="256" y="112" name="inst_D8159E21" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_wall" x="0" y="0" name="inst_A81E8DF9" locked="0" code="" scaleX="1" scaleY="8.5" colour="4294967295" rotation="0"/>
   </instances>
   <tiles/>
   <PhysicsWorld>-1</PhysicsWorld>

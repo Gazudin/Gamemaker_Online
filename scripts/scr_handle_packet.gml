@@ -175,6 +175,14 @@ switch(command){
       }
     }*/
     break;
+    
+  case "SPAWN ENEMY":
+    enemy = buffer_read(argument0, buffer_string);
+    pos_x = buffer_read(argument0, buffer_u16);
+    pos_y = buffer_read(argument0, buffer_u16);
+    
+    instance_create(pos_x, pos_y, asset_get_index(enemy));
+    break;
       
   // User stopped moving
   case "IDLE":

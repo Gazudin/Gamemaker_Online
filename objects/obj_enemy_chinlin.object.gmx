@@ -126,7 +126,6 @@ sprite[IDLE, DOWN] = spr_chinlin_stand_down;
             <kind>1</kind>
             <string>/// Move towards the player
 event_inherited();
-script_execute(state);
 sprite_index = sprite[movement, face];
 </string>
           </argument>
@@ -157,7 +156,7 @@ if(state != scr_enemy_stall_state){
   var ydir = lengthdir_y(1, dir);
   var damage = instance_create(other.x+xdir, other.y+ydir, obj_damage);
   damage.creator = id;
-  damage.knockback = 5;
+  damage.knockback = 8;
   state = scr_enemy_stall_state;
   alarm[1] = room_speed;
 }

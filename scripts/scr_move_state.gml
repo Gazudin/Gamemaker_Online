@@ -1,9 +1,7 @@
 ///scr_move_state()
-// For later comparison
+movement = MOVE;
 old_x = phy_position_x;
 old_y = phy_position_y;
-
-movement = MOVE;
 
 if(Input.dash_key){
   var xdir = lengthdir_x(8, face*90);
@@ -37,6 +35,7 @@ if(Input.dash_key){
   }
 }
 
+
 if(Input.attack_key){
   image_index = 0;
   state = scr_attack_state;
@@ -46,6 +45,7 @@ if(Input.attack_key){
   buffer_write(packet, buffer_u32, face); // Direction to attack
   scr_network_write(Network.TCP_socket, packet, "tcp");
 }
+
 
 if(Input.spell_key){
   var p = instance_create(x, y, obj_projectile);
@@ -79,7 +79,7 @@ phy_position_y += vspd;
 // Check if moving
 image_speed = .1;
 
-if(len == 0){ // Not moving
+if(old_x == phy_position_x and old_y == phy_position_y){ // Not moving
   image_index = 0;
   
   // If not already in idle
@@ -92,6 +92,9 @@ if(len == 0){ // Not moving
   }
 } else { // If moving, update position
   idle = false; // Not idle any more when moving
+  // update old x/y
+  old_x = phy_position_x;
+  old_y = phy_position_y;
 
  /*var packet = buffer_create(1, buffer_grow, 1);
   buffer_write(packet, buffer_string, "pos");
@@ -109,5 +112,6 @@ if(len == 0){ // Not moving
   buffer_write(packet, buffer_u32, y);
   scr_network_write(Network.TCP_socket, packet, "tcp");
 }
+
 
 

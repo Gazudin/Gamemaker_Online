@@ -5,7 +5,7 @@
   <visible>-1</visible>
   <depth>0</depth>
   <persistent>-1</persistent>
-  <parentName>obj_lifeform_parent</parentName>
+  <parentName>obj_player_user_parent</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
     <event eventtype="0" enumb="0">
@@ -37,6 +37,7 @@ face = RIGHT;
 movement = MOVE;
 state = scr_move_state;
 
+AI_host = false;
 idle = false;
 old_x = x;
 old_y = y;
@@ -61,9 +62,9 @@ sprite[ATTACK, DOWN] = spr_player_attack_down;
 instance_create(x, y, View);
 
 // Create turdl
-if(!instance_exists(obj_turtle)){
+/*if(!instance_exists(obj_turtle)){
     pet = instance_create(x, y, obj_turtle)
-}
+}*/
 </string>
           </argument>
         </arguments>
@@ -87,10 +88,10 @@ if(!instance_exists(obj_turtle)){
           <argument>
             <kind>1</kind>
             <string>/// destroy pet
-if(instance_exists(pet)){
-    with(pet){
-        instance_destroy();
-    }
+if(instance_exists(obj_turtle)){
+  with(pet){
+    instance_destroy();
+  }
 }
 
 if(instance_exists(obj_player_stats)){
@@ -167,15 +168,10 @@ if(!Chat.typing){
 }
 
 if(obj_player_stats.hp &lt;= 0){
-  show_message("You died! But Gazu the almighty revived you");
+  //show_message("You died! But Gazu the almighty revived you");
   obj_player_stats.hp = 1;
   // instance_destroy();
 }
-
-
-
-
-
 </string>
           </argument>
         </arguments>
@@ -394,7 +390,7 @@ if(room != rm_login){
         </arguments>
       </action>
     </event>
-    <event eventtype="8" enumb="0">
+    <event eventtype="8" enumb="64">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -411,23 +407,14 @@ if(room != rm_login){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/// draw username and shadow
-draw_sprite(spr_player_shadow, image_index, x, y);
-draw_self();
+            <string>/// Debug
 
-// Configure font
-draw_set_font(fnt_user_name);
-draw_set_halign(fa_center);
-draw_set_valign(fa_bottom);
 
-// Draw name
-scr_draw_border_text(phy_position_x+username_x_offset, phy_position_y+username_y_offset,
-  username, c_white, c_black, 1, 1.0);
-  
-// Reset font
-draw_set_halign(fa_left);
-draw_set_valign(fa_top);
-
+// Idle debug
+draw_set_halign(fa_right);
+scr_draw_border_text(display_get_gui_width()-10, 80, "Idle: "+string(idle), c_white, c_black, 1, 1.0);
+scr_draw_border_text(display_get_gui_width()-10, 100, "phy x/y: "+string(phy_position_x)+"/"+string(phy_position_y), c_white, c_black, 1, 1.0);
+scr_draw_border_text(display_get_gui_width()-10, 120, "old x/y: "+string(old_x)+"/"+string(old_y), c_white, c_black, 1, 1.0);
 </string>
           </argument>
         </arguments>

@@ -107,7 +107,6 @@ id_y_offset = -sprite_height/2;
             <kind>1</kind>
             <string>/// Move towards the player
 event_inherited();
-script_execute(state);
 </string>
           </argument>
         </arguments>

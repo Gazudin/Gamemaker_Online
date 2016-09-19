@@ -9,3 +9,11 @@ scr_get_face(dir);
 movement = MOVE;
 phy_position_x += hspd;
 phy_position_y += vspd;
+
+// Send position update
+var packet = buffer_create(1, buffer_grow, 1);
+buffer_write(packet, buffer_string, "enemy pos");
+buffer_write(packet, buffer_string, ID);
+buffer_write(packet, buffer_u32, x);
+buffer_write(packet, buffer_u32, y);
+scr_network_write(Network.TCP_socket, packet, "tcp");

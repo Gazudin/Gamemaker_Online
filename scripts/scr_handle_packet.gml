@@ -57,7 +57,7 @@ switch(command){
         audio_stop_sound(System.bgm);
         System.bgm = bgm_wild_arms_overworld;
         audio_play_sound(System.bgm, 5, true);
-        audio_sound_gain(System.bgm, .4, 0);
+        audio_sound_gain(System.bgm, System.bgm_volume, 0);
         // Initiate a player object on this room
         with(instance_create(target_x, target_y, obj_player)){
             username = other.username;
@@ -107,13 +107,16 @@ switch(command){
     username = buffer_read(argument0, buffer_string);
     pos_x = buffer_read(argument0, buffer_u16);
     pos_y = buffer_read(argument0, buffer_u16);
+    hp = buffer_read(argument0, buffer_u16);
+    maxhp = buffer_read(argument0, buffer_u16);
+    
     // is user already in room
     foundUser = -1;
     with(obj_user){
-        if(username == other.username){
-            foundUser = id;
-            break;
-        }
+      if(username == other.username){
+        foundUser = id;
+        break;
+      }
     }
     // didn't find the user, create it
     if(foundUser == -1){
@@ -121,6 +124,8 @@ switch(command){
         username = other.username;
         x = other.pos_x;
         y = other.pos_y;
+        hp = other.hp;
+        maxhp = other.maxhp;
       }
     }
     break;
@@ -155,17 +160,42 @@ switch(command){
     
     foundPlayer = -1;
     
-    // check if that user is already created
+    // Check if that user is already created
     with(obj_user){
       if(username == other.username){
         other.foundPlayer = id;
         break;
       }
     }
-    // did we find that user
+    // Did we find that user
     if(foundPlayer != -1){
       // then move user
       with(foundPlayer){
+        target_x = other.target_x;
+        target_y = other.target_y;
+      }
+    }
+    break;      
+    
+  // Enemy updates position
+  case "ENEMY POS":
+    ID = buffer_read(argument0, buffer_string);
+    target_x = buffer_read(argument0, buffer_u16);
+    target_y = buffer_read(argument0, buffer_u16);
+    
+    foundEnemy = -1;
+    
+    // Check if that enemy is already created
+    with(obj_enemy_parent){
+      if(ID == other.ID){
+        other.foundEnemy = id;
+        break;
+      }
+    }
+    // Did we find that enemy
+    if(foundEnemy != -1){
+      // Then move enemy
+      with(foundEnemy){
         target_x = other.target_x;
         target_y = other.target_y;
       }
@@ -276,8 +306,6 @@ switch(command){
     if(foundEnemy != -1){
       // then damage enemy
       with(foundEnemy){
-        show_debug_message("xforce: "+string(other.xforce));
-        show_debug_message("yforce: "+string(other.yforce));
         hp -= other.damage;
         physics_apply_impulse(x, y, other.xforce, other.yforce);
       }
@@ -304,7 +332,54 @@ switch(command){
       }
     }
     break;
-      
+    
+          
+  case "DAMAGE USER":
+    username = buffer_read(argument0, buffer_string);
+    damage = buffer_read(argument0, buffer_u16);
+    xforce = buffer_read(argument0, buffer_s16)/1000;
+    yforce = buffer_read(argument0, buffer_s16)/1000;
+    
+    foundUser = -1;
+    
+    if(instance_exists(obj_player_user_parent)){
+      // Check if that user exists
+      with(obj_player_user_parent){
+        if(username == other.username){
+          other.foundUser = id;
+          break;
+        }
+      }
+      // Did we find that user
+      if(foundUser != -1){
+        // Then damage user
+        with(foundUser){
+          hp -= other.damage;
+          System.knockback_target = other.username;
+          System.debug_xforce = other.xforce;
+          System.debug_yforce = other.yforce;
+          physics_apply_impulse(x, y, other.xforce, other.yforce);
+        }
+      }
+    }
+    break;
+
+    
+  case "AI HOST":
+    username = buffer_read(argument0, buffer_string);
+    
+    if(instance_exists(obj_player)){
+      with(obj_player){
+        if (username == other.username){
+          AI_host = true;
+        } else {
+          AI_host = false;
+        }
+      }
+    }
+    break;
+    
+    
   case "PUSSY":
     username = buffer_read(argument0, buffer_string);
     xx = buffer_read(argument0, buffer_u16);

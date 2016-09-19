@@ -27,10 +27,16 @@
             <kind>1</kind>
             <string>/// Initialize the enemy aprent
 phy_fixed_rotation = true;
+
+host = false;
+
 ID = "";
 hp = 0;
 maxhp = 0;
 expr = 0;
+
+target_x = x;
+target_y = y;
 </string>
           </argument>
         </arguments>
@@ -85,8 +91,19 @@ if(scr_chance(.3)){ // 30% chance
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/// Depth correction
+            <string>/// Depth correction, execute state
 depth = -y;
+if(instance_exists(obj_player)){
+  if(obj_player.AI_host){
+    script_execute(state);
+  } else if(x != target_x and y != target_y){
+    phy_position_x = target_x;
+    phy_position_y = target_y;
+    image_speed = .1;
+  } else {
+    image_speed = 0;
+  }
+}
 </string>
           </argument>
         </arguments>

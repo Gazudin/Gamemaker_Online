@@ -78,13 +78,12 @@ text_visible = string_copy(text[text_page], 0, text_count);
 var xx = (x-view_xview[0])*display_scale;
 var yy = (y-view_yview[0])*display_scale;
 
-
-
 // Configure text
 draw_set_font(fnt_dialog);
 draw_set_color(c_black);
 
 // Draw the text
+draw_set_halign(fa_left);
 draw_text_ext(xx+margin, yy+margin, text_visible, -1, width-(margin*2));
 
 // Add to the count

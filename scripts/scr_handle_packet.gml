@@ -196,8 +196,22 @@ switch(command){
     if(foundEnemy != -1){
       // Then move enemy
       with(foundEnemy){
+        movement = MOVE;
         target_x = other.target_x;
         target_y = other.target_y;
+      }
+    }
+    break;
+      
+  // Enemy changed direction
+  case "ENEMY FACE":
+    ID = buffer_read(argument0, buffer_string);
+    face = buffer_read(argument0, buffer_u8);
+    if(instance_exists(obj_enemy_parent)){
+      with(obj_enemy_parent){
+        if(ID == other.ID){
+          face = other.face;
+        }
       }
     }
     break;
@@ -226,6 +240,19 @@ switch(command){
       if(username == other.username){
         image_speed = 0;
         image_index = 0;
+      }
+    }
+    break;
+      
+  // Enemy stopped moving
+  case "ENEMY IDLE":
+    ID = buffer_read(argument0, buffer_string);
+    if(instance_exists(obj_enemy_parent)){
+      with(obj_enemy_parent){
+        if(ID == other.ID){
+          movement = IDLE;
+          image_speed = image_spd;
+        }
       }
     }
     break;

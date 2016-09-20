@@ -29,6 +29,7 @@ if(scr_animation_hit_frame(3)){
   audio_play_sound(snd_sword_attack, 8, false);
   with(instance_create(xx, yy, obj_damage)){
     creator = other.id;
+    knockback = 13;
     damage = obj_player_stats.attack;
   }
 }

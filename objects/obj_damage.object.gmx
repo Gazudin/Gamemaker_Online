@@ -78,7 +78,6 @@ instance_destroy();
             <kind>1</kind>
             <string>/// Damage all enemies
 if(other.id != creator){
-  other.hp -= damage;
   
   // Apply the knockback
   if(instance_exists(creator)){

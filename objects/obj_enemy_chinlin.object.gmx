@@ -27,18 +27,14 @@
             <kind>1</kind>
             <string>/// Initialize the chinlin
 event_inherited();
-image_speed = .175;
+image_spd = .175;
+image_speed = image_spd;
 spd = .8;
-state = scr_enemy_idle_state;
 alarm[0] = room_speed*irandom_range(2, 5);
 sight = 80;
 xaxis = 0;
 yaxis = 0;
-movement = IDLE;
-face = RIGHT;
 
-id_x_offset = 0;
-id_y_offset = -sprite_height/2;
 
 // Create the sprite arrays
   // Moving
@@ -126,7 +122,6 @@ sprite[IDLE, DOWN] = spr_chinlin_stand_down;
             <kind>1</kind>
             <string>/// Move towards the player
 event_inherited();
-sprite_index = sprite[movement, face];
 </string>
           </argument>
         </arguments>
@@ -160,43 +155,6 @@ if(state != scr_enemy_stall_state){
   state = scr_enemy_stall_state;
   alarm[1] = room_speed;
 }
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="8" enumb="0">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>/// Draw ID
-draw_self();
-
-// Configure font
-draw_set_font(fnt_user_name);
-draw_set_halign(fa_center);
-draw_set_valign(fa_bottom);
-
-// Draw name
-//scr_draw_border_text(x+id_x_offset, y+id_y_offset,
-//  'ID: '+string(id), c_white, c_black, 1, 1.0);
-  
-// Reset font
-draw_set_halign(fa_left);
-draw_set_valign(fa_top);
 </string>
           </argument>
         </arguments>

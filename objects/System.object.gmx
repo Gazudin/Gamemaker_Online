@@ -192,7 +192,7 @@ switch(room_get_name(room)){
     break;
 }
 
-// reset text, draw ping
+// Reset text, draw ping
 draw_set_halign(fa_left);
 scr_draw_border_text(10, 10, "Ping: "+string(Network.ping)+"ms",
   c_white, c_black, 1, 1.0);

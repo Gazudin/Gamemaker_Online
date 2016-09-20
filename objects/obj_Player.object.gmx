@@ -408,13 +408,6 @@ if(room != rm_login){
           <argument>
             <kind>1</kind>
             <string>/// Debug
-
-
-// Idle debug
-draw_set_halign(fa_right);
-scr_draw_border_text(display_get_gui_width()-10, 80, "Idle: "+string(idle), c_white, c_black, 1, 1.0);
-scr_draw_border_text(display_get_gui_width()-10, 100, "phy x/y: "+string(phy_position_x)+"/"+string(phy_position_y), c_white, c_black, 1, 1.0);
-scr_draw_border_text(display_get_gui_width()-10, 120, "old x/y: "+string(old_x)+"/"+string(old_y), c_white, c_black, 1, 1.0);
 </string>
           </argument>
         </arguments>

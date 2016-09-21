@@ -100,8 +100,6 @@ instance_destroy();
           <argument>
             <kind>1</kind>
             <string>if(other.id != creator){
-  other.hp -= 1;
-  
   // Apply the knockback
   var dir = point_direction(0, 0, phy_speed_x, phy_speed_y);
   var xforce = lengthdir_x(knockback, dir);
@@ -109,6 +107,16 @@ instance_destroy();
   with(other){
     physics_apply_impulse(x, y, xforce, yforce);
   }
+  
+  // Send damage packet
+  var packet = buffer_create(1, buffer_grow, 1);
+  buffer_write(packet, buffer_string, "damage enemy");
+  buffer_write(packet, buffer_string, other.ID);
+  buffer_write(packet, buffer_u16, 1);
+  buffer_write(packet, buffer_s16, int64(xforce)*1000);
+  buffer_write(packet, buffer_s16, int64(yforce)*1000);
+  scr_network_write(Network.TCP_socket, packet, "tcp");
+  
   alarm[0] = 1;
 }
 </string>

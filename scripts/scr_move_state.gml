@@ -38,11 +38,12 @@ if(Input.dash_key){
 
 if(Input.attack_key){
   image_index = 0;
+  movement = ATTACK;
   state = scr_attack_state;
   // Send attack packet
   var packet = buffer_create(1, buffer_grow, 1);
   buffer_write(packet, buffer_string, "attack");
-  buffer_write(packet, buffer_u32, face); // Direction to attack
+  buffer_write(packet, buffer_u8, face); // Direction to attack
   scr_network_write(Network.TCP_socket, packet, "tcp");
 }
 
@@ -65,7 +66,16 @@ if(Input.xaxis == 0 and Input.yaxis == 0){
   len = 0;
 } else {
   len = spd;
+  var tmpFace = face;
   scr_get_face(dir);
+  // Send face packet if face changed
+  if(face != tmpFace){
+    var packet = buffer_create(1, buffer_grow, 1);
+    buffer_write(packet, buffer_string, "face");
+    buffer_write(packet, buffer_string, username);
+    buffer_write(packet, buffer_u8, face);
+    scr_network_write(Network.TCP_socket, packet, "tcp");
+  }
 }
 
 // Get the hspd and vspd
@@ -77,10 +87,9 @@ phy_position_x += hspd;
 phy_position_y += vspd;
 
 // Check if moving
-image_speed = .1;
-
 if(old_x == phy_position_x and old_y == phy_position_y){ // Not moving
   image_index = 0;
+  image_speed = 0;
   
   // If not already in idle
   if(!idle){
@@ -92,6 +101,7 @@ if(old_x == phy_position_x and old_y == phy_position_y){ // Not moving
   }
 } else { // If moving, update position
   idle = false; // Not idle any more when moving
+  image_speed = image_spd;
   // update old x/y
   old_x = phy_position_x;
   old_y = phy_position_y;

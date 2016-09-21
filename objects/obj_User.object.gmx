@@ -26,13 +26,12 @@
           <argument>
             <kind>1</kind>
             <string>/// Initialize other user
+event_inherited();
 phy_fixed_rotation = true;
-image_speed = 0;
 username_x_offset = 0;
 username_y_offset = -sprite_height/2;
 target_x = x;
 target_y = y;
-face = DOWN;
 
 dashing = false;
 attacking = false;
@@ -86,6 +85,9 @@ dashing = false;
             <string>/// Depth correction
 depth = -y;
 
+// Update sprite
+sprite_index = sprite[movement, face];
+
 // Create dash effect
 if(dashing){
   with(instance_create(x, y, obj_dash_effect)){
@@ -95,18 +97,26 @@ if(dashing){
 }
 
 // Move
-if(!attacking){
-  if(target_x != round(x) or target_y != round(y)){
+if(movement == MOVE and !attacking){
+  if((target_x != round(x) or target_y != round(y))){
     phy_position_x = target_x;
     phy_position_y = target_y;
-    image_speed = .1;
+    image_speed = image_spd;
   }
-} else {
-  if(scr_animation_hit_frame(3)){
+// Attack
+} else if(movement == ATTACK){
+  if(scr_animation_hit_frame(3)) {
     audio_play_sound(snd_sword_attack, 5, 0);
+  } 
+} else if(movement == KNOCKBACK){
+  if(old_x == x and old_y == y){
+    movement = MOVE;
+    image_speed = image_spd;;
   }
 }
 
+old_x = x;
+old_y = y;
 
 </string>
           </argument>
@@ -132,9 +142,9 @@ if(!attacking){
             <kind>1</kind>
             <string>/// End attacking
 if(attacking){
-  attacking = false;
-  sprite_index = spr_player_down;
+  movement = MOVE;
   image_speed = 0;
+  attacking = false;
 }
 </string>
           </argument>
@@ -160,22 +170,22 @@ if(attacking){
             <kind>1</kind>
             <string>/// Debug
 
-/*
+
 
 // Configure font
 draw_set_font(fnt_HUD);
 draw_set_halign(fa_right);
 draw_set_valign(fa_bottom);
 
-//scr_draw_border_text(display_get_gui_width(), 150, 'target x/y: '+string(target_x)+'/'+string(target_y), c_white, c_black, 1, 1.0);
-//scr_draw_border_text(display_get_gui_width(), 166, 'current x/y: '+string(round(x))+'/'+string(round(y)), c_white, c_black, 1, 1.0);
+scr_draw_border_text(display_get_gui_width(), 150, 'movement: '+string(movement), c_white, c_black, 1, 1.0);
+scr_draw_border_text(display_get_gui_width(), 166, 'image_spd: '+string(image_speed), c_white, c_black, 1, 1.0);
 //scr_draw_border_text(display_get_gui_width(), 182, 'image_speed : '+string(image_speed), c_white, c_black, 1, 1.0);
 
 // Reset font
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);
 
-*/
+
 </string>
           </argument>
         </arguments>

@@ -42,15 +42,6 @@ switch(command){
         stamina = buffer_read(argument0, buffer_u16);
         maxstamina = buffer_read(argument0, buffer_u16);
         attack = buffer_read(argument0, buffer_u16);
-        
-        show_debug_message('Got level: '+string(level));
-        show_debug_message('Got expr: '+string(expr));
-        show_debug_message('Got maxexpr: '+string(maxexpr));
-        show_debug_message('Got hp: '+string(hp));
-        show_debug_message('Got maxhp: '+string(maxhp));
-        show_debug_message('Got stamina: '+string(stamina));
-        show_debug_message('Got maxstamina: '+string(maxstamina));
-        show_debug_message('Got attack: '+string(attack));
          
         goto_room = asset_get_index(target_room);
         room_goto(goto_room);
@@ -173,9 +164,25 @@ switch(command){
       with(foundPlayer){
         target_x = other.target_x;
         target_y = other.target_y;
+        if(movement != attacking){
+          movement = MOVE;
+        }
       }
     }
-    break;      
+    break;
+      
+  // Player changed face direction
+  case "FACE":
+    username = buffer_read(argument0, buffer_string);
+    face = buffer_read(argument0, buffer_u8);
+    if(instance_exists(obj_user)){
+      with(obj_user){
+        if(username == other.username){
+          face = other.face;
+        }
+      }
+    }
+    break; 
     
   // Enemy updates position
   case "ENEMY POS":
@@ -221,14 +228,15 @@ switch(command){
     asset = buffer_read(argument0, buffer_string);
     spawn_x = buffer_read(argument0, buffer_u16);
     spawn_y = buffer_read(argument0, buffer_u16);
+    hp = buffer_read(argument0, buffer_u16);
     maxhp = buffer_read(argument0, buffer_u16);
     expr = buffer_read(argument0, buffer_u16);
     
     // Create the enemy
     with(instance_create(spawn_x, spawn_y, asset_get_index(asset))){
       ID = other.ID;
-      hp = other.maxhp;
-      maxhp = hp;
+      hp = other.hp;
+      maxhp = other.maxhp;
       expr = other.expr;
     };
     break;
@@ -238,6 +246,7 @@ switch(command){
     username = buffer_read(argument0, buffer_string);
     with(obj_user){
       if(username == other.username){
+        movement = IDLE;
         image_speed = 0;
         image_index = 0;
       }
@@ -289,25 +298,10 @@ switch(command){
     face = buffer_read(argument0, buffer_u16);
     with(obj_user){
       if(username == other.username){
-        switch(other.face){
-          case RIGHT:
-            sprite_index = spr_player_attack_right;
-            break;
-            
-          case UP:
-            sprite_index = spr_player_attack_up;
-            break;
-            
-          case LEFT:
-            sprite_index = spr_player_attack_left;
-            break;
-            
-          case DOWN:
-            sprite_index = spr_player_attack_down;
-            break;
-        }
         image_index = 0;
         image_speed = .4;
+        face = other.face;
+        movement = ATTACK;
         attacking = true;
       }
     }
@@ -381,10 +375,14 @@ switch(command){
       if(foundUser != -1){
         // Then damage user
         with(foundUser){
-          hp -= other.damage;
-          System.knockback_target = other.username;
-          System.debug_xforce = other.xforce;
-          System.debug_yforce = other.yforce;
+          if(username == obj_player.username){
+            obj_player_stats.hp -= other.damage;
+          } else {
+            hp -= other.damage;
+          }
+          image_speed = 0;
+          image_index = 0;
+          movement = KNOCKBACK;
           physics_apply_impulse(x, y, other.xforce, other.yforce);
         }
       }

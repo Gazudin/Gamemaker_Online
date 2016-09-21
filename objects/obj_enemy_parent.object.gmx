@@ -148,20 +148,31 @@ draw_self();
 // Get health percentage
 var pct = round(hp/(maxhp/100));
 
-// Draw outline
-draw_set_color(c_black);
-draw_rectangle(x-sprite_width/2-6, y-sprite_height/2-3,x-sprite_width/2+16, y-sprite_height/2, true)
-// Draw maxhp
-draw_set_color(c_red);
-draw_rectangle(x-sprite_width/2-5, y-sprite_height/2-2,x-sprite_width/2+15, y-sprite_height/2-1, false);
-// Draw current hp
-draw_set_color(c_green);
-draw_rectangle(x-sprite_width/2-5, y-sprite_height/2-2,x-sprite_width/2-5+(pct/5), y-sprite_height/2-1, false);
-
 // Draw pct
 draw_set_halign(fa_center);
 draw_set_font(fnt_user_name);
 scr_draw_border_text(x, y+15, string(hp)+"/"+string(maxhp)+" = "+string(pct)+"%", c_white, c_black, 1, 1.0);
+
+var flip = false;
+if(image_xscale = -1){
+  image_xscale = 1;
+  flip = true;
+}
+
+// Draw outline
+draw_set_color(c_black);
+draw_rectangle(x-sprite_width/2-1, y-sprite_height/2-3,x-sprite_width/2+21, y-sprite_height/2, true)
+// Draw maxhp
+draw_set_color(c_red);
+draw_rectangle(x-sprite_width/2, y-sprite_height/2-2,x-sprite_width/2+20, y-sprite_height/2-1, false);
+// Draw current hp
+draw_set_color(c_green);
+draw_rectangle(x-sprite_width/2, y-sprite_height/2-2,x-sprite_width/2+(pct/5), y-sprite_height/2-1, false);
+
+if(flip){
+  image_xscale = -1;
+}
+
 
 
 // Reset text

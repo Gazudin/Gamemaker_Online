@@ -121,7 +121,6 @@ if(other.id != creator){
             <kind>1</kind>
             <string>/// Damage the player
 if(other.id != creator){
-  obj_player_stats.hp -= damage;
   audio_play_sound(snd_player_takes_damage, 9, false);
   
   // Apply the knockback

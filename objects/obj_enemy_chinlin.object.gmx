@@ -31,7 +31,7 @@ image_spd = .175;
 image_speed = image_spd;
 spd = .8;
 alarm[0] = room_speed*irandom_range(2, 5);
-sight = 80;
+sight = 100;
 xaxis = 0;
 yaxis = 0;
 

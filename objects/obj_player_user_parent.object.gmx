@@ -8,6 +8,56 @@
   <parentName>obj_lifeform_parent</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
+    <event eventtype="0" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// Initialize
+spd = 2;
+movement = MOVE;
+face = DOWN;
+image_spd = .1;
+image_speed = 0;
+
+// Create the sprite arrays
+  // Moving
+sprite[MOVE, RIGHT] = spr_player_right;
+sprite[MOVE, UP] = spr_player_up;
+sprite[MOVE, LEFT] = spr_player_left;
+sprite[MOVE, DOWN] = spr_player_down;
+  // Attacking
+sprite[ATTACK, RIGHT] = spr_player_attack_right;
+sprite[ATTACK, UP] = spr_player_attack_up;
+sprite[ATTACK, LEFT] = spr_player_attack_left;
+sprite[ATTACK, DOWN] = spr_player_attack_down;
+  // IDLE
+sprite[IDLE, RIGHT] = spr_player_right;
+sprite[IDLE, UP] = spr_player_up;
+sprite[IDLE, LEFT] = spr_player_left;
+sprite[IDLE, DOWN] = spr_player_down;
+  // KNOCKBACK
+sprite[KNOCKBACK, RIGHT] = spr_player_right;
+sprite[KNOCKBACK, UP] = spr_player_up;
+sprite[KNOCKBACK, LEFT] = spr_player_left;
+sprite[KNOCKBACK, DOWN] = spr_player_down;
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
     <event eventtype="8" enumb="0">
       <action>
         <libid>1</libid>

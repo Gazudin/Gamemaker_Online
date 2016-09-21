@@ -27,14 +27,10 @@
             <kind>1</kind>
             <string>/// Initialize the player
 event_inherited();
-spd = 2;
 hspd = 0;
 vspd = 0;
 len= 0;
 dir = 0;
-image_speed = 0;
-face = RIGHT;
-movement = MOVE;
 state = scr_move_state;
 
 AI_host = false;
@@ -44,18 +40,6 @@ old_y = y;
 username_x_offset = 0;
 username_y_offset = -sprite_height/2;
 rekt_pussies = 0;
-
-// Create the sprite arrays
-  // Moving
-sprite[MOVE, RIGHT] = spr_player_right;
-sprite[MOVE, UP] = spr_player_up;
-sprite[MOVE, LEFT] = spr_player_left;
-sprite[MOVE, DOWN] = spr_player_down;
-  // Attacking
-sprite[ATTACK, RIGHT] = spr_player_attack_right;
-sprite[ATTACK, UP] = spr_player_attack_up;
-sprite[ATTACK, LEFT] = spr_player_attack_left;
-sprite[ATTACK, DOWN] = spr_player_attack_down;
 
 
 // Create the View

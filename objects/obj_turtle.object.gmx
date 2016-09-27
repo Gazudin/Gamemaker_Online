@@ -54,7 +54,6 @@ name_y_offset = -30;
           <argument>
             <kind>1</kind>
             <string>/// movement
-event_inherited();
 
 if(instance_exists(obj_player)){
   if(point_distance(x, y, obj_player.x, obj_player.y) &gt;= 12){

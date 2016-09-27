@@ -63,6 +63,7 @@
       <script>scripts\scr_get_face.gml</script>
       <script>scripts\scr_chance.gml</script>
       <script>scripts\scr_string_copy_words.gml</script>
+      <script>scripts\scr_animation_hit_frame.gml</script>
     </scripts>
     <scripts name="Player states">
       <script>scripts\scr_move_state.gml</script>
@@ -80,7 +81,6 @@
       <script>scripts\scr_enemy_chase_state.gml</script>
       <script>scripts\scr_enemy_stall_state.gml</script>
     </scripts>
-    <script>scripts\scr_animation_hit_frame.gml</script>
   </scripts>
   <fonts name="fonts">
     <font>fonts\fnt_login</font>
@@ -114,19 +114,22 @@
         </objects>
       </objects>
     </objects>
+    <object>objects\obj_lifeform_parent</object>
     <objects name="Player">
+      <object>objects\obj_player_user_parent</object>
       <object>objects\obj_player</object>
       <object>objects\obj_user</object>
       <object>objects\obj_player_stats</object>
       <object>objects\obj_dash_effect</object>
     </objects>
-    <object>objects\obj_lifeform_parent</object>
+    <objects name="Enemies">
+      <object>objects\obj_enemy_parent</object>
+      <object>objects\obj_enemy_slime</object>
+      <object>objects\obj_enemy_chinlin</object>
+    </objects>
     <object>objects\obj_pussy</object>
     <object>objects\obj_turtle</object>
     <object>objects\obj_wall</object>
-    <object>objects\obj_enemy_slime</object>
-    <object>objects\obj_enemy_chinlin</object>
-    <object>objects\obj_damage</object>
     <object>objects\obj_expr</object>
     <object>objects\obj_health</object>
     <object>objects\obj_door</object>
@@ -134,6 +137,7 @@
     <object>objects\obj_dialog</object>
     <object>objects\obj_sign</object>
     <object>objects\obj_projectile</object>
+    <object>objects\obj_damage</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_login</room>

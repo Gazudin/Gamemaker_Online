@@ -59,7 +59,7 @@ instance_destroy();
         </arguments>
       </action>
     </event>
-    <event eventtype="4" ename="obj_turtle">
+    <event eventtype="4" ename="obj_enemy_parent">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -76,32 +76,8 @@ instance_destroy();
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/// Don't damage TURDLE :'(
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="4" ename="obj_lifeform_parent">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>/// Damage all lifeforms
+            <string>/// Damage all enemies
 if(other.id != creator){
-  other.hp -= damage;
   
   // Apply the knockback
   if(instance_exists(creator)){
@@ -111,9 +87,15 @@ if(other.id != creator){
   }
   var xforce = lengthdir_x(knockback, dir);
   var yforce = lengthdir_y(knockback, dir);
-  with(other){
-    physics_apply_impulse(x, y, xforce, yforce);
-  }
+    
+  // Send damage packet
+  var packet = buffer_create(1, buffer_grow, 1);
+  buffer_write(packet, buffer_string, "damage enemy");
+  buffer_write(packet, buffer_string, other.ID);
+  buffer_write(packet, buffer_u16, damage);
+  buffer_write(packet, buffer_s16, int64(xforce)*1000);
+  buffer_write(packet, buffer_s16, int64(yforce)*1000);
+  scr_network_write(Network.TCP_socket, packet, "tcp");
 }
 </string>
           </argument>
@@ -139,7 +121,6 @@ if(other.id != creator){
             <kind>1</kind>
             <string>/// Damage the player
 if(other.id != creator){
-  obj_player_stats.hp -= damage;
   audio_play_sound(snd_player_takes_damage, 9, false);
   
   // Apply the knockback
@@ -150,9 +131,17 @@ if(other.id != creator){
   }
   var xforce = lengthdir_x(knockback, dir);
   var yforce = lengthdir_y(knockback, dir);
-  with(other){
-    physics_apply_impulse(x, y, xforce, yforce);
-  }
+  
+  // Send damage packet
+  var packet = buffer_create(1, buffer_grow, 1);
+  buffer_write(packet, buffer_string, "damage user");
+  buffer_write(packet, buffer_string, other.username);
+  buffer_write(packet, buffer_u16, damage);
+  buffer_write(packet, buffer_s16, int64(xforce)*1000);
+  buffer_write(packet, buffer_s16, int64(yforce)*1000);
+  scr_network_write(Network.TCP_socket, packet, "tcp");
+  
+  
 }
 </string>
           </argument>

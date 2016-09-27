@@ -1,6 +1,5 @@
 ///scr_attack_state();
 image_speed = .4;
-movement = ATTACK;
 
 if(scr_animation_hit_frame(3)){
   var xx = 0;
@@ -29,6 +28,7 @@ if(scr_animation_hit_frame(3)){
   audio_play_sound(snd_sword_attack, 8, false);
   with(instance_create(xx, yy, obj_damage)){
     creator = other.id;
+    knockback = 11;
     damage = obj_player_stats.attack;
   }
 }

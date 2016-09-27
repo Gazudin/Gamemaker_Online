@@ -27,6 +27,13 @@
             <kind>1</kind>
             <string>/// Initialize
 bgm = bgm_ragnarok;
+bgm_volume = .1;
+
+// Debug
+knockback_target = "";
+debug_xforce = "";
+debug_yforce = "";
+
 
 
 
@@ -57,7 +64,7 @@ bgm = bgm_ragnarok;
 
 if(!audio_is_playing(bgm)){
     audio_play_sound(bgm, 1, true);
-    audio_sound_gain(System.bgm, .4, 0);
+    audio_sound_gain(System.bgm, System.bgm_volume, 0);
 }
 </string>
           </argument>
@@ -179,13 +186,13 @@ switch(room_get_name(room)){
     }
     break;
       
-  case "rm_starting_zone":
+  default:
     draw_set_halign(fa_right);
     scr_draw_border_text(display_get_gui_width()-10, 10, "ESC: Logout", c_white, c_black, 1, 1.0)
     break;
 }
 
-// reset text, draw ping
+// Reset text, draw ping
 draw_set_halign(fa_left);
 scr_draw_border_text(10, 10, "Ping: "+string(Network.ping)+"ms",
   c_white, c_black, 1, 1.0);
@@ -244,7 +251,7 @@ switch(keyboard_key){
             audio_stop_sound(bgm);
             bgm = bgm_ragnarok;
             audio_play_sound(bgm, 5, true);
-            audio_sound_gain(bgm, .4, 0);
+            audio_sound_gain(bgm, bgm_volume, 0);
         }
         break;
         
@@ -257,13 +264,19 @@ switch(keyboard_key){
     case ord('M'):
         // if not typing in chat
         if(instance_exists(Chat)){
-            if(!Chat.typing){
-                if(!audio_is_paused(bgm)){
-                    audio_pause_sound(bgm);
-                } else {
-                    audio_resume_sound(bgm);
-                }
+          if(!Chat.typing){
+            if(!audio_is_paused(bgm)){
+              audio_pause_sound(bgm);
+            } else {
+              audio_resume_sound(bgm);
             }
+          }
+        } else {
+          if(!audio_is_paused(bgm)){
+            audio_pause_sound(bgm);
+          } else {
+            audio_resume_sound(bgm);
+          }
         }
         break
 

@@ -5,7 +5,7 @@
   <visible>-1</visible>
   <depth>0</depth>
   <persistent>-1</persistent>
-  <parentName>obj_lifeform_parent</parentName>
+  <parentName>obj_player_user_parent</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
     <event eventtype="0" enumb="0">
@@ -27,16 +27,13 @@
             <kind>1</kind>
             <string>/// Initialize the player
 event_inherited();
-spd = 2;
 hspd = 0;
 vspd = 0;
 len= 0;
 dir = 0;
-image_speed = 0;
-face = RIGHT;
-movement = MOVE;
 state = scr_move_state;
 
+AI_host = false;
 idle = false;
 old_x = x;
 old_y = y;
@@ -44,26 +41,14 @@ username_x_offset = 0;
 username_y_offset = -sprite_height/2;
 rekt_pussies = 0;
 
-// Create the sprite arrays
-  // Moving
-sprite[MOVE, RIGHT] = spr_player_right;
-sprite[MOVE, UP] = spr_player_up;
-sprite[MOVE, LEFT] = spr_player_left;
-sprite[MOVE, DOWN] = spr_player_down;
-  // Attacking
-sprite[ATTACK, RIGHT] = spr_player_attack_right;
-sprite[ATTACK, UP] = spr_player_attack_up;
-sprite[ATTACK, LEFT] = spr_player_attack_left;
-sprite[ATTACK, DOWN] = spr_player_attack_down;
-
 
 // Create the View
 instance_create(x, y, View);
 
 // Create turdl
-if(!instance_exists(obj_turtle)){
+/*if(!instance_exists(obj_turtle)){
     pet = instance_create(x, y, obj_turtle)
-}
+}*/
 </string>
           </argument>
         </arguments>
@@ -87,10 +72,10 @@ if(!instance_exists(obj_turtle)){
           <argument>
             <kind>1</kind>
             <string>/// destroy pet
-if(instance_exists(pet)){
-    with(pet){
-        instance_destroy();
-    }
+if(instance_exists(obj_turtle)){
+  with(pet){
+    instance_destroy();
+  }
 }
 
 if(instance_exists(obj_player_stats)){
@@ -167,15 +152,10 @@ if(!Chat.typing){
 }
 
 if(obj_player_stats.hp &lt;= 0){
-  show_message("You died! But Gazu the almighty revived you");
+  //show_message("You died! But Gazu the almighty revived you");
   obj_player_stats.hp = 1;
   // instance_destroy();
 }
-
-
-
-
-
 </string>
           </argument>
         </arguments>
@@ -259,13 +239,11 @@ with(obj_player_stats){
           <argument>
             <kind>1</kind>
             <string>/// Collect expr
-with(other){
-  instance_destroy();
-  audio_play_sound(snd_expr, 5, false);
-}
+
+var plusexpr = other.plusexpr
 
 with(obj_player_stats){
-  expr += 1;
+  expr += plusexpr;
   // Level up
   if(expr &gt;= maxexpr){
     level += 1;
@@ -290,7 +268,11 @@ with(obj_player_stats){
     buffer_write(packet, buffer_u32, attack);
     scr_network_write(Network.TCP_socket, packet, "tcp");
   }
-  
+}
+
+with(other){
+  instance_destroy();
+  audio_play_sound(snd_expr, 5, false);
 }
 </string>
           </argument>
@@ -392,7 +374,7 @@ if(room != rm_login){
         </arguments>
       </action>
     </event>
-    <event eventtype="8" enumb="0">
+    <event eventtype="8" enumb="64">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -409,23 +391,23 @@ if(room != rm_login){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/// draw username and shadow
-draw_sprite(spr_player_shadow, image_index, x, y);
-draw_self();
-
+            <string>/// Draw debug
 // Configure font
-draw_set_font(fnt_user_name);
-draw_set_halign(fa_center);
+draw_set_font(fnt_HUD);
+draw_set_halign(fa_right);
 draw_set_valign(fa_bottom);
 
-// Draw name
-scr_draw_border_text(phy_position_x+username_x_offset, phy_position_y+username_y_offset,
-  username, c_white, c_black, 1, 1.0);
-  
+if(AI_host){
+  scr_draw_border_text(display_get_gui_width(), 150, 'AI Host: True', 
+    c_white, c_black, 1, 1.0);
+} else {
+  scr_draw_border_text(display_get_gui_width(), 170, 'AI Host: False', 
+    c_white, c_black, 1, 1.0);
+}
+
 // Reset font
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);
-
 </string>
           </argument>
         </arguments>

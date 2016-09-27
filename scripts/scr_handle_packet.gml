@@ -295,7 +295,7 @@ switch(command){
       
   case "ATTACK":
     username = buffer_read(argument0, buffer_string);
-    face = buffer_read(argument0, buffer_u16);
+    face = buffer_read(argument0, buffer_u8);
     with(obj_user){
       if(username == other.username){
         image_index = 0;

@@ -391,7 +391,23 @@ if(room != rm_login){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/// Debug
+            <string>/// Draw debug
+// Configure font
+draw_set_font(fnt_HUD);
+draw_set_halign(fa_right);
+draw_set_valign(fa_bottom);
+
+if(AI_host){
+  scr_draw_border_text(display_get_gui_width(), 150, 'AI Host: True', 
+    c_white, c_black, 1, 1.0);
+} else {
+  scr_draw_border_text(display_get_gui_width(), 170, 'AI Host: False', 
+    c_white, c_black, 1, 1.0);
+}
+
+// Reset font
+draw_set_halign(fa_left);
+draw_set_valign(fa_top);
 </string>
           </argument>
         </arguments>

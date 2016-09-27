@@ -34,11 +34,15 @@ ID = "";
 hp = 0;
 maxhp = 0;
 expr = 0;
+
+xaxis = 0;
+yaxis = 0;
 target_x = x;
 target_y = y;
 movement = IDLE;
 face = RIGHT;
 state = scr_enemy_idle_state;
+
 id_x_offset = 0;
 id_y_offset = -sprite_height/2;
 </string>
@@ -78,6 +82,52 @@ if(scr_chance(.3)){ // 30% chance
         </arguments>
       </action>
     </event>
+    <event eventtype="2" enumb="1">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// Stall alarm
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="2" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// Wander alarm
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
     <event eventtype="3" enumb="0">
       <action>
         <libid>1</libid>
@@ -102,25 +152,55 @@ depth = -y;
 sprite_index = sprite[movement, face];
 
 if(instance_exists(obj_player)){
-  if(obj_player.AI_host){ // execute state if we're on the host client
+  // If we're client
+  if(obj_player.AI_host){ 
+    // Execute state
     script_execute(state);
+  // Else move to target
   } else if(x != target_x and y != target_y){
-    // Flip sprite horizontally depending on direction
-    if(target_x &gt; x){
-      image_xscale = 1;
-    } else if(target_x &lt; x){
-      image_xscale = -1;
-    }
-    // Move
-    movement = MOVE;
-    image_speed = image_spd;
-    phy_position_x = target_x;
-    phy_position_y = target_y;
+    var dir = point_direction(x, y, target_x, target_y);
+    xaxis = lengthdir_x(1, dir);
+    yaxis = lengthdir_y(1, dir);
+    scr_move_axis();
   } else {
     movement = IDLE;
   }
 }
 
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="8" enumb="64">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// Draw debug
+// Configure font
+draw_set_font(fnt_HUD);
+draw_set_halign(fa_right);
+draw_set_valign(fa_bottom);
+
+//scr_draw_border_text(display_get_gui_width(), 150, 'x/y: '+string(x)+"/"+string(y), c_white, c_black, 1, 1.0);
+//scr_draw_border_text(display_get_gui_width(), 166, 'targetx/y: '+string(target_x)+"/"+string(target_y), c_white, c_black, 1, 1.0);
+
+// Reset font
+draw_set_halign(fa_left);
+draw_set_valign(fa_top);
 </string>
           </argument>
         </arguments>
@@ -172,7 +252,6 @@ draw_rectangle(x-sprite_width/2, y-sprite_height/2-2,x-sprite_width/2+(pct/5), y
 if(flip){
   image_xscale = -1;
 }
-
 
 
 // Reset text

@@ -111,7 +111,7 @@ if(movement == MOVE and !attacking){
 } else if(movement == KNOCKBACK){
   if(old_x == x and old_y == y){
     movement = MOVE;
-    image_speed = image_spd;;
+    image_speed = image_spd;
   }
 }
 
@@ -176,10 +176,6 @@ if(attacking){
 draw_set_font(fnt_HUD);
 draw_set_halign(fa_right);
 draw_set_valign(fa_bottom);
-
-scr_draw_border_text(display_get_gui_width(), 150, 'movement: '+string(movement), c_white, c_black, 1, 1.0);
-scr_draw_border_text(display_get_gui_width(), 166, 'image_spd: '+string(image_speed), c_white, c_black, 1, 1.0);
-//scr_draw_border_text(display_get_gui_width(), 182, 'image_speed : '+string(image_speed), c_white, c_black, 1, 1.0);
 
 // Reset font
 draw_set_halign(fa_left);

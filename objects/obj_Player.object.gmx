@@ -136,11 +136,11 @@ new_sprite = sprite[movement, face];
 // When changing sprite
 if(new_sprite != sprite_index){
   sprite_index = new_sprite;
-  // Send sprite packet
+  /* Send sprite packet
   var packet = buffer_create(1, buffer_grow, 1);
   buffer_write(packet, buffer_string, "sprite");
   buffer_write(packet, buffer_string, sprite_get_name(new_sprite));
-  scr_network_write(Network.TCP_socket, packet, "tcp");
+  scr_network_write(Network.TCP_socket, packet, "tcp");*/
 }
 
 // Don't act if typing

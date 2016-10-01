@@ -1,4 +1,5 @@
 ///scr_enemy_stall_state()
+state_string = "STALL";
 
 // Send idle packet if not idle already
 if(movement != IDLE){

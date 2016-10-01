@@ -45,6 +45,7 @@ state = scr_enemy_idle_state;
 
 id_x_offset = 0;
 id_y_offset = -sprite_height/2;
+state_string = "IDLE";
 </string>
           </argument>
         </arguments>
@@ -152,8 +153,12 @@ depth = -y;
 sprite_index = sprite[movement, face];
 
 if(instance_exists(obj_player)){
+  // Execute stall state even if not client
+  if(state == scr_enemy_stall_state){ 
+    script_execute(state);
+  }
   // If we're client
-  if(obj_player.AI_host){ 
+  else if(obj_player.AI_host){ 
     // Execute state
     script_execute(state);
   // Else move to target
@@ -232,6 +237,7 @@ var pct = round(hp/(maxhp/100));
 draw_set_halign(fa_center);
 draw_set_font(fnt_user_name);
 scr_draw_border_text(x, y+15, string(hp)+"/"+string(maxhp)+" = "+string(pct)+"%", c_white, c_black, 1, 1.0);
+//scr_draw_border_text(x, y+25, "state: "+state_string, c_white, c_black, 1, 1.0);
 
 var flip = false;
 if(image_xscale = -1){

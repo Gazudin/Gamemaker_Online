@@ -39,6 +39,7 @@ ping = 0;
 ping_frequency = 1500;// milliseconds between 2 pings
 ping_sent = false;
 timeout = 3500; // milliseconds before connection timeout
+timeout = 8000; // milliseconds before connection timeout
 ip = "95.143.172.196";
 tcp_port = 61027;
 udp_port = 61954;

@@ -72,7 +72,6 @@ if(Input.xaxis == 0 and Input.yaxis == 0){
   if(face != tmpFace){
     var packet = buffer_create(1, buffer_grow, 1);
     buffer_write(packet, buffer_string, "face");
-    buffer_write(packet, buffer_string, username);
     buffer_write(packet, buffer_u8, face);
     scr_network_write(Network.TCP_socket, packet, "tcp");
   }

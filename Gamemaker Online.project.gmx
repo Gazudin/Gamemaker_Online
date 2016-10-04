@@ -50,6 +50,7 @@
     <background>background\bg_connecting</background>
     <background>background\bg_Title</background>
     <background>background\bg_grass</background>
+    <background>background\bg_overworld</background>
   </backgrounds>
   <paths name="paths"/>
   <scripts name="scripts">
@@ -144,6 +145,7 @@
     <rooms name="Maps">
       <room>rooms\rm_starting_zone</room>
       <room>rooms\rm_test</room>
+      <room>rooms\rm_overworld</room>
     </rooms>
   </rooms>
   <help>

@@ -107,21 +107,22 @@ if(movement == KNOCKBACK){
     movement = MOVE;
     image_speed = image_spd;
   }
-// Move when not in attack state
-} else if(movement != ATTACK){
+// Move when in MOVE state
+} else if(movement == MOVE){
   phy_position_x = target_x;
   phy_position_y = target_y;
-  if(old_x != x &amp;&amp; old_y != y){
+  /*if(old_x != x &amp;&amp; old_y != y){
     image_speed = image_spd;
   } else {
     // Idle when no movement
     image_speed = 0;
-  }
-// Else execute attack
-} else{
-  if(scr_animation_hit_frame(3)) {
+  }*/
+  image_speed = image_spd
+// Else execute attack sound if attack state
+} else if(movement == IDLE){
+    image_speed = 0;
+} else if(movement == ATTACK &amp;&amp; scr_animation_hit_frame(3)) {
     audio_play_sound(snd_sword_attack, 5, 0);
-  } 
 }
 
 old_x = x;
@@ -185,6 +186,15 @@ if(attacking){
 draw_set_font(fnt_HUD);
 draw_set_halign(fa_right);
 draw_set_valign(fa_bottom);
+
+
+scr_draw_border_text(display_get_gui_width(), 180, 'STATE: ' + string(movement), 
+    c_white, c_black, 1, 1.0);
+scr_draw_border_text(display_get_gui_width(), 200, 'image_spd: ' + string(image_spd), 
+    c_white, c_black, 1, 1.0);
+scr_draw_border_text(display_get_gui_width(), 220, 'image_index: ' + string(image_index), 
+    c_white, c_black, 1, 1.0);
+
 
 // Reset font
 draw_set_halign(fa_left);

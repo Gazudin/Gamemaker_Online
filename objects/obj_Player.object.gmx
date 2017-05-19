@@ -401,7 +401,7 @@ if(AI_host){
   scr_draw_border_text(display_get_gui_width(), 150, 'AI Host: True', 
     c_white, c_black, 1, 1.0);
 } else {
-  scr_draw_border_text(display_get_gui_width(), 170, 'AI Host: False', 
+  scr_draw_border_text(display_get_gui_width(), 150, 'AI Host: False', 
     c_white, c_black, 1, 1.0);
 }
 

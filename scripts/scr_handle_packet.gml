@@ -166,6 +166,7 @@ switch(command){
         target_y = other.target_y;
         if(movement != attacking){
           movement = MOVE;
+          image_speed = image_spd
         }
       }
     }

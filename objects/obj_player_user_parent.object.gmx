@@ -27,7 +27,7 @@
             <kind>1</kind>
             <string>/// Initialize
 spd = 2;
-movement = MOVE;
+movement = IDLE;
 face = DOWN;
 image_spd = .1;
 image_speed = 0;
